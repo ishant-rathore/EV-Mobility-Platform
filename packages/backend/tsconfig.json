@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "noUncheckedIndexedAccess": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+    // No `baseUrl`/`paths` on purpose: with baseUrl set to ./src, a bare
+    // import like `from 'mqtt'` resolves to our own src/mqtt/ directory
+    // before node_modules. Relative imports keep module resolution
+    // unambiguous.
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "prisma", "**/*.test.ts"]
+}

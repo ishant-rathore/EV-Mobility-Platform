@@ -1,0 +1,21 @@
+{
+  "name": "@paypark/shared",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shared types, enums and constants for the Pay&Park EV mobility platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "clean": "rimraf dist",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.10",
+    "typescript": "^5.8.3"
+  }
+}
