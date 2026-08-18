@@ -1,11 +1,23 @@
-# Sequence Diagrams
 
-**Documentation area:** 03-architecture
+---
 
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
+# 10. `SEQUENCE_DIAGRAMS.md`
 
-## Purpose
-Define the canonical project guidance for this topic.
+```md
+# ⚡ EV Mobility Platform — Sequence Diagrams
 
-## Status
-Scaffold / team-owned document.
+**Version:** 1.0  
+**Status:** SIH 2026 MVP
+
+---
+
+# 1. Login
+
+```text
+User → Frontend: Enter credentials
+Frontend → API: POST /auth/login
+API → Database: Find user
+Database → API: User
+API → API: Verify password
+API → Frontend: JWT
+Frontend → User: Login successful
