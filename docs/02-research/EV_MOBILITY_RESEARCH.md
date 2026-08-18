@@ -1,11 +1,40 @@
-# Ev Mobility Research
 
-**Documentation area:** 02-research
+---
 
-SIH problem analysis, EV mobility research, charging research, traffic integration, competitors, and differentiation.
+# `02 - EV_MOBILITY_RESEARCH.md`
 
-## Purpose
-Define the canonical project guidance for this topic.
+```md
+# ⚡ EV Mobility Research
 
-## Status
-Scaffold / team-owned document.
+**Project:** EV Mobility Platform  
+**Version:** 1.0  
+**Status:** SIH 2026
+
+---
+
+# 1. Research Objective
+
+Study the broader EV mobility journey rather than focusing only on charging.
+
+---
+
+# 2. EV Mobility Ecosystem
+
+```text
+                 EV MOBILITY
+                      │
+       ┌──────────────┼──────────────┐
+       ↓              ↓              ↓
+    Vehicle         Route         Energy
+       │              │              │
+       └──────────────┼──────────────┘
+                      ↓
+                  Charging
+                      ↓
+                  Parking
+                      ↓
+                   Payment
+                      ↓
+                    IoT
+                      ↓
+                  Analytics
