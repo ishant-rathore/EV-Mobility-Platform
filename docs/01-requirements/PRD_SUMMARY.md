@@ -1,12 +1,11 @@
+# EV Mobility Platform — PRD Summary
+
+**Version:** 1.0  
+**Status:** Frozen SIH 2026 MVP
 
 ---
 
-## 7. `PRD_SUMMARY.md`
-
-```md
-# EV Mobility Platform — PRD Summary
-
-## What is it?
+## 1. What is it?
 
 EV Mobility Platform is an intelligent EV journey platform combining:
 
@@ -14,19 +13,28 @@ EV Mobility Platform is an intelligent EV journey platform combining:
 
 ---
 
-## Main User
+## 2. Main User
 
-EV Driver
-
----
-
-## Main Problem
-
-EV drivers do not have one connected system for planning their battery, finding the best charging station, reserving charging/parking and accessing the physical bay.
+**EV Driver**
 
 ---
 
-## Main Solution
+## 3. Main Problem
+
+EV drivers do not have one connected system for:
+
+- Planning their battery
+- Finding the best charging station
+- Reserving charging
+- Reserving parking
+- Making payments
+- Accessing the physical parking bay
+
+The platform connects these activities into one continuous EV journey.
+
+---
+
+## 4. Main Solution
 
 ```text
 EV
