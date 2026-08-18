@@ -41,3 +41,6 @@ desktop.ini
 logs/
 tmp/
 temp/
+
+# Local notes
+/notes/
