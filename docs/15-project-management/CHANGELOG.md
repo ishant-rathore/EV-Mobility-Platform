@@ -9,3 +9,4 @@
 - Completed Module 9 P0 simulated reservation, payment, parking assignment, access, occupancy, and conflict-prevention flow.
 - Completed Module 7 P0 normalized REST/MQTT telemetry, realtime monitoring, simulator fallback, and low-voltage ESP8266 demo firmware.
 - Completed Modules 10 and 11 P0 driver and operator experiences, including the simulated transaction handoff and unified operations dashboard.
+- Completed Module 12 P0 with validated reset, traffic, charger, batch, mode, and freeze controls; reset remains process-local and never deletes database data.

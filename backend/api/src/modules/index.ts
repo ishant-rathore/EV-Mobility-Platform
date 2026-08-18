@@ -9,6 +9,7 @@ import { reliabilityRouter } from "./reliability/reliability.routes.js";
 import { routingRouter } from "./routing/routing.routes.js";
 import { telemetryRouter } from "./telemetry/telemetry.routes.js";
 import { trafficRouter } from "./traffic/traffic.routes.js";
+import { demoControlRouter } from "./admin/demo-control.routes.js";
 
 export const apiRouter = Router();
 
@@ -22,3 +23,4 @@ apiRouter.use("/parking", parkingRouter);
 apiRouter.use("/recommendations", recommendationRouter);
 apiRouter.use("/reliability", reliabilityRouter);
 apiRouter.use("/telemetry", telemetryRouter);
+apiRouter.use("/admin/demo", demoControlRouter);

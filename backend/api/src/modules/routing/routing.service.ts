@@ -16,7 +16,7 @@ import {
 } from "./environment-factor.service.js";
 import { estimateRouteSegments } from "./route-segments.service.js";
 import type { EnergyEstimateInput, EvaluatedRoute, RouteEvaluationInput, RouteEvaluationResult } from "./routing.types.js";
-import { getRouteTrafficSnapshot } from "../traffic/traffic-prediction.service.js";
+import { getControlledRouteTrafficSnapshot } from "../traffic/demo-traffic.service.js";
 
 const DEFAULT_EFFICIENCY_WH_PER_KM = 180;
 const DEFAULT_ENVIRONMENT_FACTOR = 1.05;
@@ -94,7 +94,7 @@ function buildEvaluatedRoute(
   input: RouteEvaluationInput,
   usePredictedTraffic: boolean = false,
 ): EvaluatedRoute {
-  const traffic = getRouteTrafficSnapshot(
+  const traffic = getControlledRouteTrafficSnapshot(
     template.routeId,
     usePredictedTraffic ? "PREDICTED" : "CURRENT",
     input.vehicle.vehicleClass,
@@ -185,7 +185,7 @@ export async function evaluateCandidateRoutes(
   const routes: EvaluatedRoute[] = options.map((route, index) => {
     const traffic =
       sourceMode === "DEMO" && route.trafficRouteId
-        ? getRouteTrafficSnapshot(
+        ? getControlledRouteTrafficSnapshot(
             route.trafficRouteId,
             input.trafficHorizon ?? "CURRENT",
             input.vehicle.vehicleClass,

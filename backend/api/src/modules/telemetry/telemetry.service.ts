@@ -4,6 +4,7 @@ import {
   getChargerReliability,
   ingestChargerTelemetry,
 } from "../reliability/reliability.service.js";
+import { isDemoDataFrozen } from "../admin/demo-runtime.store.js";
 
 const latestByCharger = new Map<string, ChargerTelemetry>();
 const receivedAtByCharger = new Map<string, string>();
@@ -18,6 +19,7 @@ type TelemetryListener = (result: TelemetryIngestionResult) => void;
 const listeners = new Set<TelemetryListener>();
 
 export function recordTelemetry(telemetry: ChargerTelemetry): ChargerTelemetry {
+  if (isDemoDataFrozen()) return telemetry;
   latestByCharger.set(telemetry.chargerId, telemetry);
   const reliability = ingestChargerTelemetry(telemetry);
   const receivedAt = new Date().toISOString();

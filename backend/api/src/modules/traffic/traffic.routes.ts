@@ -2,9 +2,9 @@ import { Router } from "express";
 import {
   predictTraffic,
   predictTrafficForRoute,
-  getDemoRoutes,
   type PredictionMethod,
 } from "./traffic-prediction.service.js";
+import { getControlledDemoRoutes } from "./demo-traffic.service.js";
 import {
   trafficPredictionSchema,
   predictionMethodSchema,
@@ -24,7 +24,7 @@ import { ZodError } from "zod";
 export const trafficRouter = Router();
 
 trafficRouter.get("/routes", (_request, response) => {
-  const routes = getDemoRoutes();
+  const routes = getControlledDemoRoutes();
   response.json(routes);
 });
 
@@ -74,7 +74,7 @@ trafficRouter.post("/diversify/simulate", (request, response) => {
   const input = diversificationSimulationSchema.parse(request.body);
   response.json(
     simulateDiversification({
-      routes: toDiversificationRouteInputs(getDemoRoutes()),
+      routes: toDiversificationRouteInputs(getControlledDemoRoutes()),
       vehicleClasses: input.vehicleClasses,
       requestCount: input.requestCount,
       demandUnitsPerRequest: input.demandUnitsPerRequest,

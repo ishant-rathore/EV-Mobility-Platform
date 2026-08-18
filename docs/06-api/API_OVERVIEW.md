@@ -1,11 +1,12 @@
 # API
 
-The implemented groups are `/ev`, `/journeys`, `/routes`, `/traffic`, `/chargers`, `/recommendations`, `/reliability`, `/telemetry`, `/reservations`, and `/parking` under `/api/v1`.
+The implemented groups are `/ev`, `/journeys`, `/routes`, `/traffic`, `/chargers`, `/recommendations`, `/reliability`, `/telemetry`, `/reservations`, `/parking`, and `/admin/demo` under `/api/v1`.
 
 Module 5 charging recommendations are documented in [CHARGING_API.md](CHARGING_API.md). Module 6 reliability endpoints and telemetry handoffs are documented in [RELIABILITY_API.md](RELIABILITY_API.md).
 Module 8 composition is documented in [RECOMMENDATION_API.md](RECOMMENDATION_API.md).
 Module 9 demo transactions are documented in [RESERVATION_API.md](RESERVATION_API.md), [PAYMENT_API.md](PAYMENT_API.md), and [PARKING_API.md](PARKING_API.md).
 Module 7 normalized ingestion, snapshots, and realtime events are documented in [TELEMETRY_API.md](TELEMETRY_API.md).
+Module 12 safe scenario orchestration is documented in [DEMO_CONTROL_API.md](DEMO_CONTROL_API.md).
 
 ## Integrated Modules 01–06 + 08 journey evaluation
 

@@ -567,6 +567,11 @@ Dashboard sections:
 
 # Module 12 — Demo & Simulation Control
 
+**Implementation status:** Complete at P0. The React admin page calls a validated Express
+demo-control module for process-local reset, route traffic overrides, simulated charger
+states, vehicle batches, source-mode selection, and freeze/resume. Reset never deletes
+PostgreSQL data, and an unavailable REAL provider is reported as a DEMO fallback.
+
 ## Goal
 
 Guarantee a reliable presentation even when external dependencies fail.
