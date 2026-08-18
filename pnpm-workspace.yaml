@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "backend/*"
+  - "intelligence/*"
+  - "packages/*"
+  - "database"

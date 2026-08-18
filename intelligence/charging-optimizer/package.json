@@ -1,0 +1,11 @@
+{
+  "name": "@ev-mobility/intelligence-charging-optimizer",
+  "private": true,
+  "scripts": {
+    "dev": "echo dev",
+    "build": "echo build",
+    "test": "echo test",
+    "lint": "echo lint",
+    "typecheck": "echo typecheck"
+  }
+}
