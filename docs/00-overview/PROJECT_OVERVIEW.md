@@ -1,17 +1,28 @@
-# Project Overview
+# ⚡ EV Mobility Platform — Project Overview
 
-<<<<<<< HEAD
-**Documentation area:** 00-overview
+> **Pay&Park — Intelligent EV Mobility, Charging & Smart Parking Platform**
 
-Project context, product overview, problem, solution, vision, features, terminology, and limitations.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+## 🚀 Overview
 
-## Status
-Scaffold / team-owned document.
-=======
-EV Mobility Platform supports a battery-aware driver journey from EV profile and route evaluation through advisory traffic analysis, charger recommendation, reservation, parking, payment, IoT status, and analytics. The implementation is a modular monorepo with a modular-monolith API, pure intelligence packages, and separate low-voltage IoT firmware/simulator assets.
+**EV Mobility Platform** is an intelligent EV mobility platform designed to connect the major stages of an electric vehicle journey into one unified experience.
 
-Current implemented strength is Modules 1–4: EV profile, route/energy evaluation, traffic prediction/diversification, and their integrated journey flow. Transactional and operational modules remain incremental work and must not be implied complete by their directory names.
->>>>>>> junior/main
+The platform brings together:
+
+```text
+🗺️ Journey Planning
+        ↓
+🔋 Energy Estimation
+        ↓
+⚡ Charging Intelligence
+        ↓
+🅿️ Smart Parking
+        ↓
+📅 Reservation
+        ↓
+💳 Payment
+        ↓
+📡 IoT Access
+        ↓
+📊 Analytics
