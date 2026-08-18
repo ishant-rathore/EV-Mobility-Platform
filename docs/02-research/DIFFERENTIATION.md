@@ -1,11 +1,31 @@
-# Differentiation
 
-**Documentation area:** 02-research
+---
 
-SIH problem analysis, EV mobility research, charging research, traffic integration, competitors, and differentiation.
+# `02 - DIFFERENTIATION.md`
 
-## Purpose
-Define the canonical project guidance for this topic.
+```md
+# ⚡ EV Mobility Platform — Differentiation
 
-## Status
-Scaffold / team-owned document.
+**Version:** 1.0  
+**Status:** SIH 2026
+
+---
+
+# 1. Core Differentiation
+
+EV Mobility Platform combines multiple mobility functions into one workflow.
+
+```text
+EV PROFILE
+    ↓
+JOURNEY
+    ↓
+ENERGY
+    ↓
+CHARGING
+    ↓
+PARKING
+    ↓
+PAYMENT
+    ↓
+IoT
