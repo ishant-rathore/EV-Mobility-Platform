@@ -3,8 +3,9 @@
 The implemented groups are `/ev`, `/journeys`, `/routes`, `/traffic`, `/chargers`, `/recommendations`, `/telemetry`, and `/reliability` under `/api/v1`.
 
 Module 5 charging recommendations are documented in [CHARGING_API.md](CHARGING_API.md). Module 6 reliability endpoints and telemetry handoffs are documented in [RELIABILITY_API.md](RELIABILITY_API.md).
+Module 8 composition is documented in [RECOMMENDATION_API.md](RECOMMENDATION_API.md).
 
-## Integrated Modules 01–06 journey evaluation
+## Integrated Modules 01–06 + 08 journey evaluation
 
 `POST /api/v1/journeys/evaluate` is the driver UI's primary planning endpoint. It accepts a saved
 `vehicleId`, origin/destination, optional SOC/reserve planning overrides, environment inputs,
@@ -18,9 +19,10 @@ provider, and `trafficHorizon` (`CURRENT` or `PREDICTED`). The backend then:
 5. Applies Module 05 reachability, connector, state, availability, power, detour, wait, cost, and
    reliability-aware charger ranking to the selected route.
 6. Uses Module 06 telemetry-aware reliability to invalidate unsafe candidates and select a backup.
+7. Uses Module 08 to compose the selected route, primary, backup, estimates, reasons, and warnings.
 
 The response keeps the normal `routes[]` shape and adds `vehicleSnapshot`, `integration`, and a
-`traffic` block on each demo route, plus `diversification` and `chargingIntelligence` decisions. The traffic block includes
+`traffic` block on each demo route, plus `diversification`, `chargingIntelligence`, and `recommendation` decisions. The traffic block includes
 current/predicted loads and classes, source provenance, selected horizon, travel-time multiplier,
 and vehicle eligibility. Diversification includes the selected route, score factors, projected
 utilization, threshold state and advisory explanation. Clients do not send trusted battery

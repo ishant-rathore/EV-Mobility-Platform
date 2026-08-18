@@ -11,6 +11,8 @@ The P0 journey chain is wired end to end through `POST /api/v1/journeys/evaluate
 5. Module 5 evaluates route-linked, reachable, connector-compatible charger candidates and produces an explainable ranking.
 6. Module 6 supplies dynamic reliability, invalidates faulted/offline chargers, and selects the backup.
 
+Module 8 consumes this chain and adds a single explainable recommendation summary. It does not alter the ownership of any Module 1–6 decision.
+
 ## Authoritative contracts
 
 - Journey orchestration: `backend/api/src/modules/journey/journey.service.ts`

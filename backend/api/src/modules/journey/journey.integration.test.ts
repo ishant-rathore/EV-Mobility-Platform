@@ -30,6 +30,7 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
         "TRAFFIC_DIVERSIFICATION",
         "CHARGING_STATION_INTELLIGENCE",
         "CHARGER_RELIABILITY",
+        "RECOMMENDATION_ORCHESTRATOR",
       ],
       trafficHorizon: "PREDICTED",
     });
@@ -45,6 +46,15 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
       sourceMode: "DEMO",
       recommendedRouteId: expect.any(String),
       capacityThresholdPercent: 85,
+    });
+    expect(journeyResponse.body.recommendation).toMatchObject({
+      status: "READY",
+      recommendedRouteId: journeyResponse.body.diversification.recommendedRouteId,
+      recommendedChargerId: expect.any(String),
+      backupChargerId: expect.any(String),
+      reasons: expect.any(Array),
+      sourceMode: "DEMO",
+      isSimulated: true,
     });
     expect(journeyResponse.body.diversification.candidates[0].scoreBreakdown).toMatchObject({
       time: expect.any(Number),

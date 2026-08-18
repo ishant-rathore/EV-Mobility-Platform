@@ -20,6 +20,7 @@
     "@ev-mobility/charger-reliability": "*",
     "@ev-mobility/energy-engine": "*",
     "@ev-mobility/route-engine": "*",
+    "@ev-mobility/recommendation-engine": "*",
     "@ev-mobility/station-ranking": "*",
     "@ev-mobility/traffic-engine": "*",
     "@prisma/client": "6.12.0",

@@ -245,6 +245,42 @@ export function JourneyResult() {
         </aside>
       ) : null}
 
+      {routeEvaluation.recommendation ? (
+        <aside className="mt-5 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">
+              Module 08 · Unified recommendation
+            </p>
+            <span className="rounded-full bg-cyan-400/10 px-2.5 py-1 text-xs font-semibold text-cyan-200">
+              {routeEvaluation.recommendation.sourceMode} · {routeEvaluation.recommendation.status}
+            </span>
+          </div>
+          <p className="mt-3 text-base font-medium text-slate-100">
+            Route: {routeEvaluation.recommendation.recommendedRouteName ?? "No eligible route"}
+            {routeEvaluation.recommendation.recommendedChargerId
+              ? ` · Charger: ${routeEvaluation.recommendation.recommendedChargerId}`
+              : " · No charging stop"}
+          </p>
+          {routeEvaluation.recommendation.backupChargerId ? (
+            <p className="mt-1 text-sm text-slate-300">
+              Backup charger: {routeEvaluation.recommendation.backupChargerId}
+            </p>
+          ) : null}
+          <ul className="mt-3 space-y-1 text-sm text-slate-300">
+            {routeEvaluation.recommendation.reasons.map((reason) => (
+              <li key={reason}>• {reason}</li>
+            ))}
+          </ul>
+          {routeEvaluation.recommendation.warnings.length > 0 ? (
+            <ul className="mt-3 space-y-1 text-xs text-amber-200">
+              {routeEvaluation.recommendation.warnings.map((warning) => (
+                <li key={warning}>Warning: {warning}</li>
+              ))}
+            </ul>
+          ) : null}
+        </aside>
+      ) : null}
+
       <Suspense
         fallback={
           <div className="mt-8 h-[360px] animate-pulse rounded-2xl bg-white/5" aria-label="Loading route map" />

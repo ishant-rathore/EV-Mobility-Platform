@@ -28,6 +28,7 @@ describe("authoritative six-module journey path", () => {
       "TRAFFIC_DIVERSIFICATION",
       "CHARGING_STATION_INTELLIGENCE",
       "CHARGER_RELIABILITY",
+      "RECOMMENDATION_ORCHESTRATOR",
     ]);
     expect(response.body.chargingIntelligence).toMatchObject({
       required: true,
@@ -45,6 +46,13 @@ describe("authoritative six-module journey path", () => {
     expect(response.body.chargingIntelligence.primary.chargerId).not.toBe(
       response.body.chargingIntelligence.backup.chargerId,
     );
+    expect(response.body.recommendation).toMatchObject({
+      status: "READY",
+      recommendedRouteId: response.body.diversification.recommendedRouteId,
+      recommendedChargerId: response.body.chargingIntelligence.primary.chargerId,
+      backupChargerId: response.body.chargingIntelligence.backup.chargerId,
+      reliabilityScore: response.body.chargingIntelligence.primary.reliability.score,
+    });
     expect(
       response.body.chargingIntelligence.excludedCandidates.every(
         (candidate: { connectorType: string }) => candidate.connectorType !== "CCS2",
@@ -73,6 +81,8 @@ describe("authoritative six-module journey path", () => {
     expect(telemetry.status).toBe(202);
     expect(reevaluated.status).toBe(200);
     expect(reevaluated.body.chargingIntelligence.primary.chargerId).toBe(originalBackupId);
+    expect(reevaluated.body.recommendation.recommendedChargerId).toBe(originalBackupId);
+    expect(reevaluated.body.recommendation.reasons.join(" ")).toContain("eligible CCS2");
     expect(
       reevaluated.body.chargingIntelligence.excludedCandidates.find(
         (candidate: { chargerId: string }) => candidate.chargerId === originalPrimaryId,

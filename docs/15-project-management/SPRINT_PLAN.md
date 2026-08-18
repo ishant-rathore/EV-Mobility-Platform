@@ -2,7 +2,7 @@
 
 ## Sprint objective
 
-Deliver one demonstrable vertical slice at a time without destabilizing the working Modules 1–4 handoff.
+Deliver one demonstrable vertical slice at a time without destabilizing the working Modules 1–6 and 8 handoff.
 
 ## Suggested sequence
 

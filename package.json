@@ -12,7 +12,7 @@
     "database"
   ],
   "scripts": {
-    "prepare:packages": "npm run build --workspace=@ev-mobility/shared-types && npm run build --workspace=@ev-mobility/energy-engine && npm run build --workspace=@ev-mobility/route-engine && npm run build --workspace=@ev-mobility/traffic-engine && npm run build --workspace=@ev-mobility/station-ranking && npm run build --workspace=@ev-mobility/charger-reliability",
+    "prepare:packages": "npm run build --workspace=@ev-mobility/shared-types && npm run build --workspace=@ev-mobility/energy-engine && npm run build --workspace=@ev-mobility/route-engine && npm run build --workspace=@ev-mobility/traffic-engine && npm run build --workspace=@ev-mobility/station-ranking && npm run build --workspace=@ev-mobility/charger-reliability && npm run build --workspace=@ev-mobility/recommendation-engine",
     "prebuild": "npm run prepare:packages",
     "pretypecheck": "npm run prepare:packages",
     "pretest": "npm run prepare:packages",

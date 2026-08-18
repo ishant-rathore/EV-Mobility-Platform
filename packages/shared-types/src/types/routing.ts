@@ -133,6 +133,28 @@ export interface ChargingIntelligence {
   disclaimer: string;
 }
 
+export interface RecommendationDecision {
+  recommendationId: string;
+  generatedAt: string;
+  status: "READY" | "NO_CHARGING_REQUIRED" | "NO_FEASIBLE_CHARGER" | "NO_ELIGIBLE_ROUTE";
+  sourceMode: "LIVE" | "DEMO" | "MIXED";
+  isSimulated: boolean;
+  recommendedRouteId: string | null;
+  recommendedRouteName: string | null;
+  recommendedChargerId: string | null;
+  recommendedStationId: string | null;
+  backupChargerId: string | null;
+  backupStationId: string | null;
+  estimatedArrivalSocPercent: number | null;
+  estimatedEtaMinutes: number | null;
+  estimatedWaitMinutes: number | null;
+  estimatedDetourKm: number | null;
+  estimatedPricePerKwh: number | null;
+  reliabilityScore: number | null;
+  reasons: string[];
+  warnings: string[];
+}
+
 export interface EvaluatedRoute {
   routeId: string;
   name: string;
@@ -188,6 +210,7 @@ export interface RouteEvaluation {
   destination: RouteLocation;
   routes: EvaluatedRoute[];
   chargingIntelligence?: ChargingIntelligence;
+  recommendation?: RecommendationDecision;
   diversification?: {
     advisory: true;
     sourceMode: "DEMO" | "REAL";

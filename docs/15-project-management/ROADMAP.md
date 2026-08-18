@@ -2,7 +2,7 @@
 
 ## Now — integrated technical foundation
 
-- Keep Modules 1–4 stable: EV profile, energy-aware routing, traffic intelligence, and journey integration.
+- Keep the implemented Modules 1–6 and 8 chain stable: EV profile, routing/energy, traffic, diversification, station ranking, reliability, and recommendation composition.
 - Complete authentication, reservation, payment-sandbox, parking, and charging-session happy paths.
 - Add explicit LIVE/DEMO/SIMULATED/ESTIMATED/STALE badges at every data boundary.
 - Add golden-path and charger-failure browser/API E2E coverage.

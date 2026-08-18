@@ -1,3 +1,3 @@
 # Recommendation Engine
 
-Future extraction boundary for composing route, primary charger, backup charger, and explanations. Existing recommendation behavior remains in `backend/api` until pure calculations can be extracted with tests.
+Pure Module 8 composition and explainability. It consumes already-evaluated route and charger decisions from Modules 1–6 and returns one coherent recommendation summary without performing HTTP, database, provider, or telemetry work.

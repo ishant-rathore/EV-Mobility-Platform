@@ -1,5 +1,6 @@
 import { AppError } from "../../shared/errors.js";
 import { recommendChargingCandidates } from "../charging/charging.service.js";
+import { composeJourneyRecommendation } from "../recommendation/recommendation-orchestrator.service.js";
 import { toEnergyContext } from "../ev/ev.service.js";
 import { evRepository, toEvProfileSummary } from "../ev/ev.store.js";
 import { evaluateCandidateRoutes } from "../routing/routing.service.js";
@@ -114,26 +115,36 @@ export async function evaluateIntegratedJourney(input: IntegratedJourneyEvaluati
       : route,
   );
 
+  const chargingIntelligence = {
+    required: selectedRoute?.chargingRequired ?? false,
+    routeId: selectedRoute?.routeId ?? null,
+    energyDeficitKwh: selectedRoute?.energy.energyDeficitKwh ?? 0,
+    sourceMode: chargingRecommendation?.sourceMode ?? "DEMO" as const,
+    isSimulated: chargingRecommendation?.isSimulated ?? true as const,
+    generatedAt: chargingRecommendation?.generatedAt ?? new Date().toISOString(),
+    primary: chargingRecommendation?.primary ?? null,
+    backup: chargingRecommendation?.backup ?? null,
+    candidates: chargingRecommendation?.candidates ?? [],
+    excludedCandidates: chargingRecommendation?.excludedCandidates ?? [],
+    disclaimer:
+      chargingRecommendation?.disclaimer ??
+      "No charging stop is required for the selected route under the current estimate.",
+  };
+  const recommendation = composeJourneyRecommendation({
+    generatedAt: routeEvaluation.generatedAt,
+    routeSourceMode: routeEvaluation.sourceMode,
+    routes,
+    diversification,
+    charging: chargingIntelligence,
+  });
+
   return {
     ...routeEvaluation,
     routes,
     vehicleSnapshot,
     diversification,
-    chargingIntelligence: {
-      required: selectedRoute?.chargingRequired ?? false,
-      routeId: selectedRoute?.routeId ?? null,
-      energyDeficitKwh: selectedRoute?.energy.energyDeficitKwh ?? 0,
-      sourceMode: chargingRecommendation?.sourceMode ?? "DEMO",
-      isSimulated: chargingRecommendation?.isSimulated ?? true,
-      generatedAt: chargingRecommendation?.generatedAt ?? new Date().toISOString(),
-      primary: chargingRecommendation?.primary ?? null,
-      backup: chargingRecommendation?.backup ?? null,
-      candidates: chargingRecommendation?.candidates ?? [],
-      excludedCandidates: chargingRecommendation?.excludedCandidates ?? [],
-      disclaimer:
-        chargingRecommendation?.disclaimer ??
-        "No charging stop is required for the selected route under the current estimate.",
-    },
+    chargingIntelligence,
+    recommendation,
     integration: {
       modules: [
         "EV_PROFILE",
@@ -142,6 +153,7 @@ export async function evaluateIntegratedJourney(input: IntegratedJourneyEvaluati
         "TRAFFIC_DIVERSIFICATION",
         "CHARGING_STATION_INTELLIGENCE",
         "CHARGER_RELIABILITY",
+        "RECOMMENDATION_ORCHESTRATOR",
       ],
       trafficHorizon: input.trafficHorizon,
     },

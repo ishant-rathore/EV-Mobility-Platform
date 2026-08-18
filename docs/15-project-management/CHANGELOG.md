@@ -5,3 +5,4 @@
 - Normalized repository domains while preserving existing code and documents.
 - Recorded modular ownership, risks, dependencies, roadmap, release checks, and architecture decisions.
 - Extracted tested pure intelligence algorithms behind backward-compatible backend adapters.
+- Completed Module 8 recommendation composition and wired it to the authoritative journey and fault-promotion flow.
