@@ -1,0 +1,27 @@
+services:
+  postgres:
+    extends:
+      file: docker-compose.dev.yml
+      service: postgres
+  mosquitto:
+    extends:
+      file: docker-compose.dev.yml
+      service: mosquitto
+  api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.api
+    environment:
+      DATABASE_URL: postgresql://volttwin:volttwin@postgres:5432/volttwin
+      MQTT_URL: mqtt://mosquitto:1883
+      EV_USE_DATABASE: "false"
+    ports: ["3000:3000"]
+    depends_on: [postgres, mosquitto]
+  web:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile.web
+    ports: ["5173:80"]
+    depends_on: [api]
+volumes:
+  postgres-dev:

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "@ev-mobility/packages-shared-types",
   "private": true,
   "scripts": {
@@ -7,5 +8,25 @@
     "test": "echo test",
     "lint": "echo lint",
     "typecheck": "echo typecheck"
+=======
+  "name": "@ev-mobility/shared-types",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+>>>>>>> junior/main
   }
 }

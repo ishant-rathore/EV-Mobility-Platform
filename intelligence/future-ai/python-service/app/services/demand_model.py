@@ -1,0 +1,1 @@
+"""Charging demand model adapter."""

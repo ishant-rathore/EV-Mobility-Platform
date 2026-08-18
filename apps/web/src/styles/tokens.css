@@ -1,0 +1,27 @@
+:root {
+  color-scheme: dark;
+  --mobility-background: #0b1120;
+  --mobility-surface: #111827;
+  --mobility-card: #1e293b;
+  --mobility-primary: #22c55e;
+  --mobility-accent: #06b6d4;
+  --mobility-smart: #8b5cf6;
+  --mobility-warning: #f59e0b;
+  --mobility-error: #ef4444;
+  --mobility-text: #f8fafc;
+  --mobility-muted: #94a3b8;
+  --mobility-border: #334155;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color-scheme: light;
+    --mobility-background: #f8fafc;
+    --mobility-surface: #ffffff;
+    --mobility-primary: #16a34a;
+    --mobility-accent: #0891b2;
+    --mobility-text: #0f172a;
+    --mobility-muted: #64748b;
+    --mobility-border: #e2e8f0;
+  }
+}

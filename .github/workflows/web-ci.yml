@@ -1,0 +1,28 @@
+name: Web CI
+
+on:
+  push:
+    paths:
+      - "apps/web/**"
+      - "packages/shared-types/**"
+      - "package.json"
+      - "tsconfig.base.json"
+  pull_request:
+    paths:
+      - "apps/web/**"
+      - "packages/shared-types/**"
+      - "package.json"
+      - "tsconfig.base.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build --workspace=@ev-mobility/shared-types
+      - run: npm run build --workspace=@ev-mobility/web

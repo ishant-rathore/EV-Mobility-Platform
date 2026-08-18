@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "predictions": [{ "roadId": "corridor-north", "predictedLoad": 1560, "method": "rule-based", "label": "SIMULATED" }]
+}

@@ -1,0 +1,14 @@
+services:
+  postgres-test:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: volttwin_test
+      POSTGRES_USER: volttwin
+      POSTGRES_PASSWORD: volttwin
+    tmpfs: [/var/lib/postgresql/data]
+    ports: ["5433:5432"]
+  mosquitto-test:
+    image: eclipse-mosquitto:2
+    ports: ["1884:1883"]
+    volumes:
+      - ../mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro

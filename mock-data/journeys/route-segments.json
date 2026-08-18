@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "segments": [{ "id": "corridor-north", "routeId": "route-north", "distanceKm": 45.2 }]
+}

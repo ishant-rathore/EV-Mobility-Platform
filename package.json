@@ -1,20 +1,45 @@
 {
   "name": "ev-mobility-platform",
+  "version": "0.1.0",
   "private": true,
-  "packageManager": "pnpm@10.0.0",
+  "description": "EV mobility intelligence, traffic digital twin, charger IoT, and smart parking platform",
+  "workspaces": [
+    "apps/web",
+    "backend/api",
+    "packages/*",
+    "intelligence/*",
+    "iot/simulators",
+    "database"
+  ],
   "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "format": "prettier --write .",
-    "db:generate": "pnpm --dir database prisma generate",
-    "db:migrate": "pnpm --dir database prisma migrate dev",
-    "db:seed": "pnpm --dir database seed"
+    "prepare:packages": "npm run build --workspace=@ev-mobility/shared-types && npm run build --workspace=@ev-mobility/energy-engine && npm run build --workspace=@ev-mobility/route-engine && npm run build --workspace=@ev-mobility/traffic-engine && npm run build --workspace=@ev-mobility/station-ranking && npm run build --workspace=@ev-mobility/charger-reliability",
+    "prebuild": "npm run prepare:packages",
+    "pretypecheck": "npm run prepare:packages",
+    "pretest": "npm run prepare:packages",
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev:backend\" \"npm run dev:web\"",
+    "dev:backend": "npm run dev --workspace=@ev-mobility/api",
+    "dev:web": "npm run dev --workspace=@ev-mobility/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:generate": "npm run db:generate --workspace=@ev-mobility/api",
+    "db:migrate": "npm run db:migrate --workspace=@ev-mobility/api",
+    "db:seed": "npm run db:seed --workspace=@ev-mobility/api",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
   },
+  "packageManager": "npm@11.5.2",
   "devDependencies": {
-    "prettier": "latest",
-    "turbo": "latest"
+    "concurrently": "^9.2.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "allowScripts": {
+    "@prisma/client@6.12.0": true,
+    "@prisma/engines@6.12.0": true,
+    "esbuild@0.28.2": true,
+    "prisma@6.12.0": true
   }
 }

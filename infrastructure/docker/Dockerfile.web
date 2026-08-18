@@ -1,0 +1,18 @@
+FROM node:22-alpine AS build
+WORKDIR /workspace
+COPY package.json package-lock.json tsconfig.base.json ./
+COPY apps/web/package.json apps/web/package.json
+COPY packages/shared-types/package.json packages/shared-types/package.json
+COPY intelligence ./intelligence
+COPY backend/api/package.json backend/api/package.json
+COPY iot/simulators/package.json iot/simulators/package.json
+COPY database/package.json database/package.json
+RUN npm ci --ignore-scripts
+COPY apps/web ./apps/web
+COPY packages/shared-types ./packages/shared-types
+RUN npm run build --workspace=@ev-mobility/shared-types && npm run build --workspace=@ev-mobility/web
+
+FROM nginx:1.27-alpine
+COPY --from=build /workspace/apps/web/dist /usr/share/nginx/html
+COPY infrastructure/nginx/nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80

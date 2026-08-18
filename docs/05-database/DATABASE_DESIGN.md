@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Database Design
 
 ## Purpose
@@ -37,3 +38,8 @@ Reservation creation must validate user, vehicle, station, charger compatibility
 
 ## MVP
 Use PostgreSQL + Prisma. Keep schema changes migration-based and reproducible.
+=======
+# Database
+
+The canonical Prisma schema is in `database/prisma/schema.prisma`.
+>>>>>>> junior/main

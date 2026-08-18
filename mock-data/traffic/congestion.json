@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "snapshots": [{ "roadId": "corridor-north", "load": 1200, "capacity": 2000, "label": "ESTIMATED" }]
+}

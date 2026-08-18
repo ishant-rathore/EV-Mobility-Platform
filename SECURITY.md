@@ -1,3 +1,3 @@
 # Security
 
-Do not commit credentials, payment secrets, MQTT keys, or production device certificates. Report vulnerabilities privately.
+Never commit credentials, production data, or private keys. Report vulnerabilities privately to the repository maintainers with reproduction steps, affected versions, and potential impact.

@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "scores": [{ "chargerId": "charger-demo-1", "score": 92, "grade": "A", "explanation": "Prototype weighted uptime, session success, heartbeat freshness, and fault rate." }]
+}

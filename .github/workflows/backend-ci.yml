@@ -1,0 +1,34 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "backend/**"
+      - "intelligence/**"
+      - "database/**"
+      - "package.json"
+      - "tsconfig.base.json"
+  pull_request:
+    paths:
+      - "backend/**"
+      - "intelligence/**"
+      - "database/**"
+      - "package.json"
+      - "tsconfig.base.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://volttwin:volttwin@localhost:5432/volttwin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run prepare:packages
+      - run: npm run typecheck --workspace=@ev-mobility/api
+      - run: npm run test --workspace=@ev-mobility/api

@@ -1,0 +1,12 @@
+.git
+.github
+.env
+**/.env
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+.kilo
+.kilocode
+notes
+MIGRATION_REPORT.md
+REPOSITORY_AUDIT.md
