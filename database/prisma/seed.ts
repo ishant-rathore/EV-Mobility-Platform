@@ -1,8 +1,11 @@
 import { PrismaClient } from "@prisma/client";
+import { seedEvVehicles } from "./seeds/ev-vehicles.seed.js";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await seedEvVehicles(prisma);
+
   await prisma.chargingStation.upsert({
     where: { id: "station-demo-1" },
     update: {},

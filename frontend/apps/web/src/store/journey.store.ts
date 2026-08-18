@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import type { JourneyRecommendation } from "../types/journey";
+import type { RouteEvaluation } from "../types/journey";
 
 interface JourneyState {
-  recommendation: JourneyRecommendation | null;
-  setRecommendation: (recommendation: JourneyRecommendation) => void;
+  routeEvaluation: RouteEvaluation | null;
+  setRouteEvaluation: (routeEvaluation: RouteEvaluation) => void;
 }
 
 export const useJourneyStore = create<JourneyState>((set) => ({
-  recommendation: null,
-  setRecommendation: (recommendation) => set({ recommendation }),
+  routeEvaluation: null,
+  setRouteEvaluation: (routeEvaluation) => set({ routeEvaluation }),
 }));

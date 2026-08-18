@@ -7,7 +7,8 @@ export const recommendationRouter = Router();
 recommendationRouter.post("/", async (request, response, next) => {
   try {
     const input = recommendationRequestSchema.parse(request.body);
-    response.json(await buildRecommendation(input));
+    const usePredictedTraffic = request.query.predictedTraffic === "true";
+    response.json(await buildRecommendation(input, usePredictedTraffic));
   } catch (error) {
     next(error);
   }

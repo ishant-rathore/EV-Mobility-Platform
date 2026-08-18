@@ -12,6 +12,68 @@
       }
     },
     {
+      "name": "List EV vehicles",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/ev/vehicles"
+      }
+    },
+    {
+      "name": "Get EV vehicle by id",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/ev/vehicles/vehicle-nexon-demo"
+      }
+    },
+    {
+      "name": "Create EV vehicle",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"MG Comet EV\",\n  \"vehicleClass\": \"CAR\",\n  \"connectorTypes\": [\"TYPE2\"],\n  \"batteryCapacityKwh\": 17.3,\n  \"batteryHealthPercent\": 100,\n  \"efficiencyWhPerKm\": 105,\n  \"currentSocPercent\": 60,\n  \"reserveSocPercent\": 10\n}"
+        },
+        "url": "{{baseUrl}}/ev/vehicles"
+      }
+    },
+    {
+      "name": "Update SOC",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentSocPercent\": 42\n}"
+        },
+        "url": "{{baseUrl}}/ev/vehicles/vehicle-nexon-demo/soc"
+      }
+    },
+    {
+      "name": "Update SOC — invalid (should 400)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"currentSocPercent\": 120\n}"
+        },
+        "url": "{{baseUrl}}/ev/vehicles/vehicle-nexon-demo/soc"
+      }
+    },
+    {
+      "name": "Preview EV profile (stateless)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Tata Nexon EV Max\",\n  \"vehicleClass\": \"CAR\",\n  \"connectorTypes\": [\"CCS2\"],\n  \"batteryCapacityKwh\": 40.5,\n  \"batteryHealthPercent\": 100,\n  \"efficiencyWhPerKm\": 150,\n  \"currentSocPercent\": 38,\n  \"reserveSocPercent\": 10\n}"
+        },
+        "url": "{{baseUrl}}/ev/profiles/preview"
+      }
+    },
+    {
       "name": "Estimate route energy",
       "request": {
         "method": "POST",
@@ -21,6 +83,18 @@
           "raw": "{\n  \"distanceKm\": 120,\n  \"batteryCapacityKwh\": 45,\n  \"efficiencyWhPerKm\": 170,\n  \"currentSocPercent\": 55,\n  \"reserveSocPercent\": 15\n}"
         },
         "url": "{{baseUrl}}/routes/energy-estimate"
+      }
+    },
+    {
+      "name": "Evaluate EV route alternatives",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"origin\": { \"label\": \"Mumbai Central\", \"latitude\": 18.969, \"longitude\": 72.8194 },\n  \"destination\": { \"label\": \"Pune\", \"latitude\": 18.5204, \"longitude\": 73.8567 },\n  \"vehicle\": {\n    \"id\": \"vehicle-nexon-demo\",\n    \"batteryCapacityKwh\": 40.5,\n    \"usableBatteryCapacityKwh\": 40.5,\n    \"efficiencyWhPerKm\": 150,\n    \"currentSocPercent\": 38\n  },\n  \"reserveSocPercent\": 10,\n  \"environmentFactor\": 1,\n  \"auxiliaryLoadKwh\": 0.4,\n  \"provider\": \"DEMO\"\n}"
+        },
+        "url": "{{baseUrl}}/routes/evaluate"
       }
     },
     {

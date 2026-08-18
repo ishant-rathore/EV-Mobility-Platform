@@ -1,24 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "../api/client";
 import { useJourneyStore } from "../store/journey.store";
-import type { JourneyRecommendation } from "../types/journey";
-
-export interface JourneyPlanInput {
-  distanceKm: number;
-  batteryCapacityKwh: number;
-  efficiencyWhPerKm: number;
-  currentSocPercent: number;
-  reserveSocPercent: number;
-}
+import type { IntegratedJourneyEvaluationInput, RouteEvaluation } from "../types/journey";
 
 export function useJourneyPlan() {
-  const setRecommendation = useJourneyStore((state) => state.setRecommendation);
+  const setRouteEvaluation = useJourneyStore((state) => state.setRouteEvaluation);
   return useMutation({
-    mutationFn: (input: JourneyPlanInput) =>
-      apiRequest<JourneyRecommendation>("/journeys/plan", {
+    mutationFn: (input: IntegratedJourneyEvaluationInput) =>
+      apiRequest<RouteEvaluation>("/journeys/evaluate", {
         method: "POST",
         body: JSON.stringify(input),
       }),
-    onSuccess: setRecommendation,
+    onSuccess: setRouteEvaluation,
   });
 }

@@ -1,6 +1,6 @@
 import type { StationProvider, StationRecord } from "./station.provider.js";
 
-const stations: StationRecord[] = [
+export const DEMO_STATIONS: StationRecord[] = [
   {
     id: "station-demo-1",
     name: "VoltTwin Central Hub",
@@ -25,6 +25,6 @@ const stations: StationRecord[] = [
 
 export class DemoStationProvider implements StationProvider {
   async listStations(): Promise<StationRecord[]> {
-    return stations;
+    return DEMO_STATIONS;
   }
 }

@@ -1,17 +1,9 @@
-export interface JourneyRecommendation {
-  recommendationId: string;
-  energy: {
-    distanceKm: number;
-    requiredKwh: number;
-    projectedArrivalSocPercent: number;
-    chargingRequired: boolean;
-  };
-  recommendedStation: {
-    id: string;
-    name: string;
-    availableChargers: number;
-    powerKw: number;
-    reliabilityScore: number;
-  } | null;
-  explanation: string;
-}
+export type {
+  ChargerCandidate,
+  EvaluatedRoute,
+  IntegratedJourneyEvaluationInput,
+  RouteEnergyEstimate,
+  RouteEvaluation,
+  RouteEvaluationInput,
+  RouteLocation,
+} from "../../../../shared/types/routing";

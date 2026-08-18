@@ -14,6 +14,22 @@ enum ChargerState {
   FAULTED
 }
 
+enum VehicleClass {
+  CAR
+  BIKE
+  TRUCK
+  COMMERCIAL
+}
+
+enum ConnectorType {
+  CCS2
+  CHADEMO
+  TYPE2
+  BHARAT_DC_001
+  BHARAT_AC_001
+  LEV_AC
+}
+
 enum BookingState {
   PENDING
   CONFIRMED
@@ -38,15 +54,23 @@ model User {
 }
 
 model EVVehicle {
-  id                  String    @id @default(cuid())
-  userId              String
-  name                String
-  batteryCapacityKwh  Float
-  efficiencyWhPerKm   Float
-  currentSocPercent   Float
-  createdAt           DateTime  @default(now())
-  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  journeys            Journey[]
+  id                   String          @id @default(cuid())
+  userId               String
+  name                 String
+  vehicleClass         VehicleClass    @default(CAR)
+  connectorTypes       ConnectorType[]
+  batteryCapacityKwh   Float
+  batteryHealthPercent Float           @default(100)
+  efficiencyWhPerKm    Float
+  currentSocPercent    Float
+  reserveSocPercent    Float           @default(10)
+  isDefault            Boolean         @default(false)
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+  user                 User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  journeys             Journey[]
+
+  @@index([userId])
 }
 
 model Journey {
@@ -73,7 +97,25 @@ model Route {
   geometryJson       Json?
   journey            Journey           @relation(fields: [journeyId], references: [id], onDelete: Cascade)
   trafficSnapshots   TrafficSnapshot[]
+  segments           RouteSegment[]
   recommendations    Recommendation[]
+}
+
+model RouteSegment {
+  id                 String       @id @default(cuid())
+  routeId            String
+  segmentId          String
+  name               String
+  capacity           Float
+  currentLoad        Float
+  predictedLoad      Float
+  vehicleEligibility String[]
+  freeFlowSpeedKph   Float
+  distanceKm         Float
+  route              Route        @relation(fields: [routeId], references: [id], onDelete: Cascade)
+
+  @@unique([routeId, segmentId])
+  @@index([segmentId])
 }
 
 model TrafficSnapshot {
@@ -83,8 +125,14 @@ model TrafficSnapshot {
   observedSpeedKph     Float
   occupancyPercent     Float
   congestionScore      Float
+  predictedLoad        Float?
+  capacity             Float?
+  vehicleEligibility   String[]
+  sourceMode           String   @default("DEMO")
   capturedAt           DateTime @default(now())
   route                Route?   @relation(fields: [routeId], references: [id], onDelete: SetNull)
+
+  @@index([segmentId, capturedAt])
 }
 
 model ChargingStation {

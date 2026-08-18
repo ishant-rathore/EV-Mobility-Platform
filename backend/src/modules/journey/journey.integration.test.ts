@@ -1,0 +1,77 @@
+import request from "supertest";
+import { describe, expect, it } from "vitest";
+import { app } from "../../app.js";
+
+const journeyRequest = {
+  vehicleId: "vehicle-nexon-demo",
+  origin: { label: "Mumbai Central", latitude: 18.969, longitude: 72.8194 },
+  destination: { label: "Pune", latitude: 18.5204, longitude: 73.8567 },
+  environment: { weatherCondition: "CLEAR", elevationGainM: 0 },
+  auxiliaryLoadKwh: 0.4,
+  provider: "DEMO",
+  trafficHorizon: "PREDICTED",
+};
+
+describe("Module 1 → Module 2 → Module 3 journey integration", () => {
+  it("uses the stored EV energy budget and predicted traffic for every candidate route", async () => {
+    const vehicleResponse = await request(app).get("/api/v1/ev/vehicles/vehicle-nexon-demo");
+    const journeyResponse = await request(app)
+      .post("/api/v1/journeys/evaluate")
+      .send(journeyRequest);
+
+    expect(vehicleResponse.status).toBe(200);
+    expect(journeyResponse.status).toBe(200);
+    expect(journeyResponse.body.integration).toEqual({
+      modules: ["EV_PROFILE", "ROUTING_ENERGY", "TRAFFIC_TWIN"],
+      trafficHorizon: "PREDICTED",
+    });
+    expect(journeyResponse.body.vehicleSnapshot).toMatchObject({
+      vehicleId: vehicleResponse.body.vehicleId,
+      vehicleClass: vehicleResponse.body.vehicleClass,
+      connectorTypes: vehicleResponse.body.connectorTypes,
+      usableCapacityKwh: vehicleResponse.body.usableCapacityKwh,
+    });
+    expect(journeyResponse.body.routes).toHaveLength(3);
+
+    for (const route of journeyResponse.body.routes) {
+      expect(route.energy.effectiveBatteryCapacityKwh).toBe(
+        vehicleResponse.body.usableCapacityKwh,
+      );
+      expect(route.energy.availableEnergyKwh).toBe(vehicleResponse.body.availableEnergyKwh);
+      expect(route.traffic).toMatchObject({
+        horizon: "PREDICTED",
+        sourceMode: "DEMO",
+        vehicleEligible: expect.any(Boolean),
+      });
+      expect(route.traffic.predictedLoad).not.toBe(route.traffic.currentLoad);
+      expect(route.trafficFactor).toBe(route.traffic.travelTimeMultiplier);
+    }
+  });
+
+  it("changes ETA and energy factors when the traffic horizon changes", async () => {
+    const [currentResponse, predictedResponse] = await Promise.all([
+      request(app)
+        .post("/api/v1/journeys/evaluate")
+        .send({ ...journeyRequest, trafficHorizon: "CURRENT" }),
+      request(app).post("/api/v1/journeys/evaluate").send(journeyRequest),
+    ]);
+
+    expect(currentResponse.status).toBe(200);
+    expect(predictedResponse.status).toBe(200);
+    expect(predictedResponse.body.routes[0].trafficFactor).toBeGreaterThan(
+      currentResponse.body.routes[0].trafficFactor,
+    );
+    expect(predictedResponse.body.routes[0].estimatedEnergyKwh).toBeGreaterThan(
+      currentResponse.body.routes[0].estimatedEnergyKwh,
+    );
+  });
+
+  it("rejects a missing Module 1 vehicle instead of trusting client vehicle data", async () => {
+    const response = await request(app)
+      .post("/api/v1/journeys/evaluate")
+      .send({ ...journeyRequest, vehicleId: "missing-vehicle" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.error.code).toBe("EV_VEHICLE_NOT_FOUND");
+  });
+});
