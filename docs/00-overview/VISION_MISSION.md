@@ -1,11 +1,16 @@
-# Vision Mission
+# ⚡ EV Mobility Platform — Vision & Mission
 
-**Documentation area:** 00-overview
+> **Pay&Park — Intelligent EV Mobility, Charging & Smart Parking Platform**
 
-Project context, product overview, problem, solution, vision, features, terminology, and limitations.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+# 🌍 Vision
 
-## Status
-Scaffold / team-owned document.
+> **To build a unified and intelligent EV mobility platform that connects journey planning, charging, smart parking, reservations, payments, and IoT infrastructure into one seamless EV journey.**
+
+```text
+🚗 ONE EV JOURNEY
+        ↓
+🗺️ ONE CONNECTED PLATFORM
+        ↓
+⚡ ONE BETTER MOBILITY EXPERIENCE
