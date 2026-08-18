@@ -1,0 +1,38 @@
+{
+  "name": "volttwin-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EV mobility intelligence, traffic digital twin, charger IoT, and smart parking platform",
+  "workspaces": [
+    "backend",
+    "frontend/apps/web",
+    "frontend/shared",
+    "simulator"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev:backend\" \"npm run dev:web\"",
+    "dev:backend": "npm run dev --workspace=@volttwin/backend",
+    "dev:web": "npm run dev --workspace=@volttwin/web",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:generate": "npm run db:generate --workspace=@volttwin/backend",
+    "db:migrate": "npm run db:migrate --workspace=@volttwin/backend",
+    "db:seed": "npm run db:seed --workspace=@volttwin/backend",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "allowScripts": {
+    "@prisma/client@6.12.0": true,
+    "@prisma/engines@6.12.0": true,
+    "esbuild@0.28.2": true,
+    "prisma@6.12.0": true
+  }
+}

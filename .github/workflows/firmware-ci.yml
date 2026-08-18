@@ -1,0 +1,20 @@
+name: Firmware CI
+
+on:
+  push:
+    paths:
+      - "firmware/**"
+  pull_request:
+    paths:
+      - "firmware/**"
+
+jobs:
+  esp8266:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install platformio
+      - run: platformio run --project-dir firmware/esp8266

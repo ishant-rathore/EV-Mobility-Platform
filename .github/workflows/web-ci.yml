@@ -1,0 +1,25 @@
+name: Web CI
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+      - "package.json"
+      - "tsconfig.base.json"
+  pull_request:
+    paths:
+      - "frontend/**"
+      - "package.json"
+      - "tsconfig.base.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm run build --workspace=@volttwin/web

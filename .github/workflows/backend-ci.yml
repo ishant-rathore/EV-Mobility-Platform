@@ -1,0 +1,31 @@
+name: Backend CI
+
+on:
+  push:
+    paths:
+      - "backend/**"
+      - "database/**"
+      - "package.json"
+      - "tsconfig.base.json"
+  pull_request:
+    paths:
+      - "backend/**"
+      - "database/**"
+      - "package.json"
+      - "tsconfig.base.json"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://volttwin:volttwin@localhost:5432/volttwin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm run db:generate
+      - run: npm run typecheck --workspace=@volttwin/backend
+      - run: npm run test --workspace=@volttwin/backend

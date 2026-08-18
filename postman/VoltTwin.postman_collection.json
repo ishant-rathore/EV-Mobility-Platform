@@ -1,0 +1,39 @@
+{
+  "info": {
+    "name": "VoltTwin API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:3000/health"
+      }
+    },
+    {
+      "name": "Estimate route energy",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"distanceKm\": 120,\n  \"batteryCapacityKwh\": 45,\n  \"efficiencyWhPerKm\": 170,\n  \"currentSocPercent\": 55,\n  \"reserveSocPercent\": 15\n}"
+        },
+        "url": "{{baseUrl}}/routes/energy-estimate"
+      }
+    },
+    {
+      "name": "Build recommendation",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"distanceKm\": 200,\n  \"batteryCapacityKwh\": 45,\n  \"efficiencyWhPerKm\": 180,\n  \"currentSocPercent\": 50,\n  \"reserveSocPercent\": 15\n}"
+        },
+        "url": "{{baseUrl}}/recommendations"
+      }
+    }
+  ]
+}
