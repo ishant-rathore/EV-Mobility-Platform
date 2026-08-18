@@ -1,11 +1,40 @@
-# Security Architecture
 
-**Documentation area:** 03-architecture
+---
 
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
+# 9. `SECURITY_ARCHITECTURE.md`
 
-## Purpose
-Define the canonical project guidance for this topic.
+```md
+# ⚡ EV Mobility Platform — Security Architecture
 
-## Status
-Scaffold / team-owned document.
+**Version:** 1.0  
+**Status:** SIH 2026 MVP
+
+---
+
+# 1. Security Objective
+
+Protect:
+
+- User accounts
+- EV data
+- Reservations
+- Payments
+- IoT infrastructure
+- Administrative functions
+
+---
+
+# 2. Authentication
+
+```text
+User
+ ↓
+Login
+ ↓
+Credentials Validation
+ ↓
+Password Hash Verification
+ ↓
+JWT
+ ↓
+Authenticated Request
