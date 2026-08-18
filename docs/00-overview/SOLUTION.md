@@ -1,11 +1,24 @@
-# Solution
+# ⚡ EV Mobility Platform — Solution
 
-**Documentation area:** 00-overview
+> **Pay&Park — Intelligent EV Mobility, Charging & Smart Parking Platform**
 
-Project context, product overview, problem, solution, vision, features, terminology, and limitations.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+## 💡 Solution Overview
 
-## Status
-Scaffold / team-owned document.
+The **EV Mobility Platform** solves the fragmented EV journey by connecting journey planning, energy intelligence, charging, parking, reservations, payments, IoT, and analytics into one platform.
+
+```text
+🗺️ PLAN
+   ↓
+🔋 UNDERSTAND ENERGY
+   ↓
+⚡ CHARGE
+   ↓
+🅿️ PARK
+   ↓
+💳 PAY
+   ↓
+📡 ACCESS
+   ↓
+🚗 GO
