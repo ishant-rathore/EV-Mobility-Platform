@@ -1,11 +1,3 @@
-# Data Flow
+# Data flow
 
-**Documentation area:** 03-architecture
-
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
-
-## Purpose
-Define the canonical project guidance for this topic.
-
-## Status
-Scaffold / team-owned document.
+Journey input → route and energy evaluation → traffic adjustment → charger discovery → reliability ranking → recommendation → live monitoring and rerouting.

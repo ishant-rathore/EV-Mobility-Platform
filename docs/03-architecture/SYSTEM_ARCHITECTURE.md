@@ -1,11 +1,10 @@
-# System Architecture
+# System architecture
 
-**Documentation area:** 03-architecture
-
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
-
-## Purpose
-Define the canonical project guidance for this topic.
-
-## Status
-Scaffold / team-owned document.
+```text
+React web
+   ↓ REST / WebSocket
+Express API
+   ├─ PostgreSQL / Prisma
+   ├─ routing and station providers
+   └─ MQTT ingestion ← ESP8266 / simulator
+```

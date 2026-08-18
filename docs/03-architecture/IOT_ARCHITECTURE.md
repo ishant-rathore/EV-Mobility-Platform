@@ -1,11 +1,3 @@
-# Iot Architecture
+# IoT architecture
 
-**Documentation area:** 03-architecture
-
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
-
-## Purpose
-Define the canonical project guidance for this topic.
-
-## Status
-Scaffold / team-owned document.
+Devices publish normalized telemetry over MQTT. The backend validates it, updates charger state, recalculates recommendations, and emits real-time events.
