@@ -13,7 +13,7 @@ const journeyRequest = {
   diversificationSimulationId: "journey-integration-main",
 };
 
-describe("Module 1 → Module 2 → Module 3 → Module 4 journey integration", () => {
+describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Module 6 journey integration", () => {
   it("uses the stored EV energy budget and predicted traffic for every candidate route", async () => {
     const vehicleResponse = await request(app).get("/api/v1/ev/vehicles/vehicle-nexon-demo");
     const journeyResponse = await request(app)
@@ -28,6 +28,8 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 journey integration", 
         "ROUTING_ENERGY",
         "TRAFFIC_TWIN",
         "TRAFFIC_DIVERSIFICATION",
+        "CHARGING_STATION_INTELLIGENCE",
+        "CHARGER_RELIABILITY",
       ],
       trafficHorizon: "PREDICTED",
     });

@@ -25,3 +25,5 @@ EV Mobility Platform (product UI: VoltTwin AI) combines EV journey planning, ene
 5. Run `npm run dev`.
 
 `npm run typecheck`, `npm test`, and `npm run build` validate the workspace. Demo traffic, charger, and telemetry inputs are labelled `DEMO`/`SIMULATED`; range and arrival values are estimates. The optional Python AI service is intentionally inactive until a trained model is introduced.
+
+Implemented P0 modules are EV profile/battery (1), routing/energy (2), traffic prediction (3), traffic diversification (4), charging-station intelligence (5), and charger reliability (6). `POST /api/v1/journeys/evaluate` is the authoritative six-module workflow: it uses the server-owned EV profile, selects a diversified route, ranks compatible and reachable chargers, and returns a reliability-aware primary plus backup.

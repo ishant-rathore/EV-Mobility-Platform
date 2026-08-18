@@ -68,6 +68,71 @@ export interface ChargerCandidate {
   reliabilityScore: number;
 }
 
+export interface ChargerReliabilityAssessment {
+  chargerId: string | null;
+  score: number;
+  grade: "A" | "B" | "C" | "D" | "F";
+  status: "AVAILABLE" | "CONNECTED_NOT_CHARGING" | "CHARGING" | "FAULT" | "OFFLINE";
+  isUsable: boolean;
+  recommendation: "PREFERRED" | "ACCEPTABLE" | "CAUTION" | "AVOID" | "UNAVAILABLE";
+  freshness: "FRESH" | "AGING" | "STALE" | "UNKNOWN";
+  confidencePercent: number;
+  sourceMode: "LIVE_IOT" | "LIMITED_IOT" | "OCPP" | "HARDWARE_DEMO" | "SIMULATOR" | "DEMO";
+  reasons: string[];
+  warnings: string[];
+  invalidatedBy: string[];
+  calculatedAt: string;
+}
+
+export interface RankedChargingCandidate {
+  stationId: string;
+  stationName: string;
+  stationLatitude: number;
+  stationLongitude: number;
+  stationSourceMode: "REAL" | "OCPP" | "DEMO" | "SIMULATOR";
+  isSimulated: boolean;
+  chargerId: string;
+  connectorType: string;
+  status: ChargerReliabilityAssessment["status"];
+  availablePorts: number;
+  powerKw: number;
+  pricePerKwh: number;
+  detourKm: number;
+  estimatedWaitMinutes: number;
+  reachable: boolean;
+  reliabilityScore: number;
+  reliabilityUsable: boolean;
+  reliability: ChargerReliabilityAssessment;
+  connectorCompatible: boolean;
+  eligible: boolean;
+  exclusionReasons: string[];
+  rank: number | null;
+  score: number | null;
+  scoreBreakdown: {
+    reliability: number;
+    availability: number;
+    power: number;
+    detour: number;
+    wait: number;
+    costPenalty: number;
+    total: number;
+  } | null;
+}
+
+export interface ChargingIntelligence {
+  required: boolean;
+  routeId: string | null;
+  energyDeficitKwh: number;
+  sourceMode: "DEMO";
+  isSimulated: true;
+  generatedAt: string;
+  primary: RankedChargingCandidate | null;
+  backup: RankedChargingCandidate | null;
+  candidates: RankedChargingCandidate[];
+  excludedCandidates: RankedChargingCandidate[];
+  disclaimer: string;
+}
+
 export interface EvaluatedRoute {
   routeId: string;
   name: string;
@@ -122,6 +187,7 @@ export interface RouteEvaluation {
   origin: RouteLocation;
   destination: RouteLocation;
   routes: EvaluatedRoute[];
+  chargingIntelligence?: ChargingIntelligence;
   diversification?: {
     advisory: true;
     sourceMode: "DEMO" | "REAL";
@@ -161,6 +227,7 @@ export interface RouteEvaluation {
     currentSocPercent: number;
     reserveSocPercent: number;
     usableCapacityKwh: number;
+    connectorTypes: string[];
     sourceMode: "REAL" | "OCPP" | "DEMO" | "SIMULATOR";
   };
   integration?: {

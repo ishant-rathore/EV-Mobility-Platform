@@ -200,6 +200,51 @@ export function JourneyResult() {
         </aside>
       ) : null}
 
+      {routeEvaluation.chargingIntelligence ? (
+        <aside className="mt-5 rounded-2xl border border-violet-400/20 bg-violet-400/10 p-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-300">
+              Modules 05–06 · Charging intelligence
+            </p>
+            <span className="rounded-full bg-violet-400/10 px-2.5 py-1 text-xs font-semibold text-violet-200">
+              {routeEvaluation.chargingIntelligence.isSimulated ? "SIMULATED" : "LIVE"}
+            </span>
+          </div>
+          {routeEvaluation.chargingIntelligence.required ? (
+            routeEvaluation.chargingIntelligence.primary ? (
+              <div className="mt-3 text-sm text-slate-200">
+                <p>
+                  Primary: {routeEvaluation.chargingIntelligence.primary.stationName} ·{" "}
+                  {routeEvaluation.chargingIntelligence.primary.connectorType} ·{" "}
+                  {routeEvaluation.chargingIntelligence.primary.powerKw} kW · reliability{" "}
+                  {routeEvaluation.chargingIntelligence.primary.reliability.score}/100.
+                </p>
+                {routeEvaluation.chargingIntelligence.backup ? (
+                  <p className="mt-2 text-slate-400">
+                    Backup: {routeEvaluation.chargingIntelligence.backup.stationName} ·{" "}
+                    {routeEvaluation.chargingIntelligence.backup.chargerId} · reliability{" "}
+                    {routeEvaluation.chargingIntelligence.backup.reliability.score}/100.
+                  </p>
+                ) : (
+                  <p className="mt-2 text-amber-300">No eligible backup charger is available.</p>
+                )}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-amber-300">
+                Charging is estimated to be required, but no reachable compatible charger is eligible.
+              </p>
+            )
+          ) : (
+            <p className="mt-3 text-sm text-slate-300">
+              No charging stop is estimated to be required for the selected route.
+            </p>
+          )}
+          <p className="mt-2 text-xs text-slate-400">
+            {routeEvaluation.chargingIntelligence.disclaimer}
+          </p>
+        </aside>
+      ) : null}
+
       <Suspense
         fallback={
           <div className="mt-8 h-[360px] animate-pulse rounded-2xl bg-white/5" aria-label="Loading route map" />

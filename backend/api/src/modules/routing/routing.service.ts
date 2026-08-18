@@ -1,8 +1,10 @@
 import { DemoRoutingProvider } from "../../integrations/maps/demo-routing.provider.js";
 import { OsrmRoutingProvider } from "../../integrations/maps/osrm.provider.js";
 import type { RouteOption, RoutingProvider } from "../../integrations/maps/routing.provider.js";
-import { DEMO_STATIONS } from "../../integrations/charging-providers/demo-station.provider.js";
-import { findChargingStations } from "../charging/charging.service.js";
+import {
+  DEMO_STATIONS,
+  DemoStationProvider,
+} from "../../integrations/charging-providers/demo-station.provider.js";
 import {
   recommendChargingStop,
   selectChargingStopCandidates,
@@ -19,6 +21,7 @@ import { getRouteTrafficSnapshot } from "../traffic/traffic-prediction.service.j
 const DEFAULT_EFFICIENCY_WH_PER_KM = 180;
 const DEFAULT_ENVIRONMENT_FACTOR = 1.05;
 const DEFAULT_AUXILIARY_LOAD_KWH = 0.5;
+const stationProvider = new DemoStationProvider();
 
 function environmentAdjustmentForRoute(
   input: RouteEvaluationInput,
@@ -177,7 +180,7 @@ export async function evaluateCandidateRoutes(
 ): Promise<RouteEvaluationResult> {
   const [{ options, sourceMode, fallbackReason }, stations] = await Promise.all([
     loadRouteOptions(input),
-    findChargingStations({}),
+    stationProvider.listStations(),
   ]);
   const routes: EvaluatedRoute[] = options.map((route, index) => {
     const traffic =
