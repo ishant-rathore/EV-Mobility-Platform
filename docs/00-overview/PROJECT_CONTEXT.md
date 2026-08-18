@@ -1,11 +1,28 @@
-# Project Context
+# ⚡ EV Mobility Platform — Project Context
 
-**Documentation area:** 00-overview
+> **Pay&Park — Intelligent EV Mobility, Charging & Smart Parking Platform**
 
-Project context, product overview, problem, solution, vision, features, terminology, and limitations.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+## 🌐 1. Project Background
 
-## Status
-Scaffold / team-owned document.
+The **EV Mobility Platform** is designed to address the fragmented experience faced by EV users during their journeys.
+
+The platform brings multiple mobility services together:
+
+```text
+🗺️ Journey Planning
+        ↓
+🔋 Energy Estimation
+        ↓
+⚡ Charging Intelligence
+        ↓
+🅿️ Smart Parking
+        ↓
+📅 Reservation
+        ↓
+💳 Payment
+        ↓
+📡 IoT Access
+        ↓
+📊 Analytics
