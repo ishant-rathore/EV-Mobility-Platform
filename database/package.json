@@ -1,0 +1,15 @@
+{
+  "name": "@ev-mobility/database",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Prisma schema, migrations, seeds, and database operations for EV Mobility Platform",
+  "scripts": {
+    "verify": "tsx scripts/verify.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "6.12.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5"
+  }
+}

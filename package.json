@@ -1,27 +1,34 @@
 {
-  "name": "volttwin-ai",
+  "name": "ev-mobility-platform",
   "version": "0.1.0",
   "private": true,
   "description": "EV mobility intelligence, traffic digital twin, charger IoT, and smart parking platform",
   "workspaces": [
-    "backend",
-    "frontend/apps/web",
-    "frontend/shared",
-    "simulator"
+    "apps/web",
+    "backend/api",
+    "packages/*",
+    "intelligence/*",
+    "iot/simulators",
+    "database"
   ],
   "scripts": {
+    "prepare:packages": "npm run build --workspace=@ev-mobility/shared-types && npm run build --workspace=@ev-mobility/energy-engine && npm run build --workspace=@ev-mobility/route-engine && npm run build --workspace=@ev-mobility/traffic-engine && npm run build --workspace=@ev-mobility/station-ranking && npm run build --workspace=@ev-mobility/charger-reliability",
+    "prebuild": "npm run prepare:packages",
+    "pretypecheck": "npm run prepare:packages",
+    "pretest": "npm run prepare:packages",
     "dev": "concurrently -n api,web -c cyan,magenta \"npm run dev:backend\" \"npm run dev:web\"",
-    "dev:backend": "npm run dev --workspace=@volttwin/backend",
-    "dev:web": "npm run dev --workspace=@volttwin/web",
+    "dev:backend": "npm run dev --workspace=@ev-mobility/api",
+    "dev:web": "npm run dev --workspace=@ev-mobility/web",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
-    "db:generate": "npm run db:generate --workspace=@volttwin/backend",
-    "db:migrate": "npm run db:migrate --workspace=@volttwin/backend",
-    "db:seed": "npm run db:seed --workspace=@volttwin/backend",
+    "db:generate": "npm run db:generate --workspace=@ev-mobility/api",
+    "db:migrate": "npm run db:migrate --workspace=@ev-mobility/api",
+    "db:seed": "npm run db:seed --workspace=@ev-mobility/api",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down"
   },
+  "packageManager": "npm@11.5.2",
   "devDependencies": {
     "concurrently": "^9.2.0",
     "typescript": "^5.9.2"

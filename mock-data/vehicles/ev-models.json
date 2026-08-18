@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "vehicles": [{ "id": "vehicle-nexon-demo", "model": "Demo Compact EV", "batteryCapacityKwh": 40.5, "efficiencyWhPerKm": 155 }]
+}

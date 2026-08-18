@@ -27,7 +27,7 @@ docker-data/
 
 # Firmware
 .pio/
-firmware/**/.pio/
+iot/firmware/**/.pio/
 
 # IDE and OS
 .vscode/

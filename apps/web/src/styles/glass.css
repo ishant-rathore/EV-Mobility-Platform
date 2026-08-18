@@ -1,0 +1,5 @@
+.mobility-glass {
+  background: color-mix(in srgb, var(--mobility-card) 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--mobility-border) 72%, transparent);
+  backdrop-filter: blur(12px);
+}

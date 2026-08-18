@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
-import { DEMO_USER_ID } from "../../../backend/src/modules/ev/ev.constants.js";
-import { DEMO_VEHICLES } from "../../../backend/src/modules/ev/ev.demo-data.js";
+import { DEMO_USER_ID } from "../../../backend/api/src/modules/ev/ev.constants.js";
+import { DEMO_VEHICLES } from "../../../backend/api/src/modules/ev/ev.demo-data.js";
 
 /**
  * Seeds the demo user and the four Module 1 demo vehicles (one per vehicle

@@ -17,6 +17,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm install
+      - run: npm ci
       - run: npm run db:generate
       - run: npm run build

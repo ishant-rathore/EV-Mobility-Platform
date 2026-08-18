@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "steps": ["PRIMARY_HEALTHY", "ABNORMAL_TELEMETRY", "RELIABILITY_DROPS", "PRIMARY_FAULT", "BACKUP_SELECTED", "RECOMMENDATION_UPDATED"]
+}

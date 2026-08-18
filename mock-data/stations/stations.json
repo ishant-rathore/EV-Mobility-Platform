@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "stations": [{ "id": "station-demo-1", "name": "Demo Mobility Hub", "latitude": 28.61, "longitude": 77.21 }]
+}

@@ -1,0 +1,5 @@
+{
+  "source": "demo",
+  "isSimulated": true,
+  "chargers": [{ "id": "charger-demo-1", "stationId": "station-demo-1", "connector": "CCS2", "powerKw": 60 }]
+}

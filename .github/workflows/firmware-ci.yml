@@ -3,10 +3,10 @@ name: Firmware CI
 on:
   push:
     paths:
-      - "firmware/**"
+      - "iot/firmware/**"
   pull_request:
     paths:
-      - "firmware/**"
+      - "iot/firmware/**"
 
 jobs:
   esp8266:
@@ -17,4 +17,4 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install platformio
-      - run: platformio run --project-dir firmware/esp8266
+      - run: platformio run --project-dir iot/firmware/charger-monitor

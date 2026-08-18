@@ -1,0 +1,20 @@
+{
+  "name": "@ev-mobility/iot-simulators",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:charger": "tsx charger-simulator/charger-simulator.ts",
+    "dev:traffic": "tsx traffic-simulator/traffic-simulator.ts",
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "mqtt": "^5.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

@@ -3,12 +3,14 @@ name: Web CI
 on:
   push:
     paths:
-      - "frontend/**"
+      - "apps/web/**"
+      - "packages/shared-types/**"
       - "package.json"
       - "tsconfig.base.json"
   pull_request:
     paths:
-      - "frontend/**"
+      - "apps/web/**"
+      - "packages/shared-types/**"
       - "package.json"
       - "tsconfig.base.json"
 
@@ -21,5 +23,6 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm install
-      - run: npm run build --workspace=@volttwin/web
+      - run: npm ci
+      - run: npm run build --workspace=@ev-mobility/shared-types
+      - run: npm run build --workspace=@ev-mobility/web
