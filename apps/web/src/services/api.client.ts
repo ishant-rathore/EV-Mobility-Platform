@@ -10,7 +10,14 @@ export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed with status ${response.status}`);
+    let message = `API request failed with status ${response.status}`;
+    try {
+      const payload = (await response.json()) as { error?: { message?: unknown } };
+      if (typeof payload.error?.message === "string") message = payload.error.message;
+    } catch {
+      // Keep the status-based fallback when the server did not return JSON.
+    }
+    throw new Error(message);
   }
 
   return response.json() as Promise<T>;

@@ -2,8 +2,8 @@
 
 ## Now — integrated technical foundation
 
-- Keep the implemented Modules 1–6 and 8 chain stable: EV profile, routing/energy, traffic, diversification, station ranking, reliability, and recommendation composition.
-- Complete authentication, reservation, payment-sandbox, parking, and charging-session happy paths.
+- Keep the implemented Modules 1–11 P0 chain stable from EV profile through driver and operator presentation.
+- Complete authentication and production-oriented charging-session lifecycle work without weakening the working simulated transaction flow.
 - Add explicit LIVE/DEMO/SIMULATED/ESTIMATED/STALE badges at every data boundary.
 - Add golden-path and charger-failure browser/API E2E coverage.
 
@@ -11,7 +11,7 @@
 
 - Connect low-voltage charger and parking prototypes through authenticated MQTT.
 - Demonstrate explainable primary/backup charger switching from simulated abnormal telemetry.
-- Harden demo reset, seed, offline fallback, and observability.
+- Complete Module 12 scenario controls, then harden demo reset, seed, offline fallback, and observability.
 
 ## Later — evidence-led capability
 

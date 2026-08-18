@@ -28,6 +28,7 @@ docker-data/
 # Firmware
 .pio/
 iot/firmware/**/.pio/
+iot/firmware/**/include/config.h
 
 # IDE and OS
 .vscode/
@@ -44,3 +45,4 @@ temp/
 
 # Local notes
 /notes/
+/notes completed/

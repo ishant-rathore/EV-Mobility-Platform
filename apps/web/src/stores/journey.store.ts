@@ -1,12 +1,19 @@
 import { create } from "zustand";
-import type { RouteEvaluation } from "../types/journey";
+import type { IntegratedJourneyEvaluationInput, RouteEvaluation } from "../types/journey";
 
 interface JourneyState {
   routeEvaluation: RouteEvaluation | null;
-  setRouteEvaluation: (routeEvaluation: RouteEvaluation) => void;
+  /** The request that produced `routeEvaluation`, kept so a live fault event can replay it (Module 8). */
+  lastRequest: IntegratedJourneyEvaluationInput | null;
+  setRouteEvaluation: (
+    routeEvaluation: RouteEvaluation,
+    request?: IntegratedJourneyEvaluationInput,
+  ) => void;
 }
 
 export const useJourneyStore = create<JourneyState>((set) => ({
   routeEvaluation: null,
-  setRouteEvaluation: (routeEvaluation) => set({ routeEvaluation }),
+  lastRequest: null,
+  setRouteEvaluation: (routeEvaluation, request) =>
+    set((state) => ({ routeEvaluation, lastRequest: request ?? state.lastRequest })),
 }));

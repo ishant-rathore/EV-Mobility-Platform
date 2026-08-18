@@ -11,6 +11,6 @@ export function useJourneyPlan() {
         method: "POST",
         body: JSON.stringify(input),
       }),
-    onSuccess: setRouteEvaluation,
+    onSuccess: (data, variables) => setRouteEvaluation(data, variables),
   });
 }

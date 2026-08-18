@@ -33,6 +33,47 @@ export async function findChargingStations(options: {
   );
 }
 
+/** Single-charger lookup for the driver "charger details" screen (route `/chargers/:chargerId`). */
+export async function getChargerDetail(
+  chargerId: string,
+  now: Date = new Date(),
+): Promise<ChargingCandidateRecommendation | null> {
+  const stations = await provider.listStations();
+  for (const station of stations) {
+    const charger = station.chargers?.find((candidate) => candidate.id === chargerId);
+    if (!charger) continue;
+
+    const reliability = reliabilityFor(charger, now);
+    return {
+      stationId: station.id,
+      stationName: station.name,
+      chargerId: charger.id,
+      connectorType: charger.connectorType,
+      status: reliability.status,
+      availablePorts: reliability.status === "AVAILABLE" ? 1 : 0,
+      powerKw: charger.powerKw,
+      pricePerKwh: charger.pricePerKwh,
+      detourKm: 0,
+      estimatedWaitMinutes: station.estimatedWaitMinutes ?? 0,
+      reachable: true,
+      reliabilityScore: reliability.score,
+      reliabilityUsable: reliability.isUsable,
+      connectorCompatible: true,
+      eligible: reliability.isUsable,
+      exclusionReasons: [],
+      rank: null,
+      score: null,
+      scoreBreakdown: null,
+      stationLatitude: station.latitude,
+      stationLongitude: station.longitude,
+      stationSourceMode: station.sourceMode ?? "DEMO",
+      isSimulated: station.isSimulated ?? true,
+      reliability,
+    } satisfies ChargingCandidateRecommendation;
+  }
+  return null;
+}
+
 export interface ChargingCandidateRecommendation extends RankedChargingCandidate {
   stationLatitude: number;
   stationLongitude: number;

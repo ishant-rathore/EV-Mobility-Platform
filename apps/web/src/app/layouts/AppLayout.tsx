@@ -5,13 +5,17 @@ export function AppLayout({ children }: PropsWithChildren) {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <header className="border-b border-white/10 bg-slate-950/90">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
           <NavLink to="/" className="text-lg font-semibold tracking-tight text-volt-400">
             VoltTwin AI
           </NavLink>
-          <nav aria-label="Primary navigation" className="flex gap-5 text-sm text-slate-300">
+          <nav aria-label="Primary navigation" className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300">
             <NavLink to="/">Journey</NavLink>
-            <NavLink to="/operator">Digital Twin</NavLink>
+            <NavLink to="/journey/live">Live journey</NavLink>
+            <NavLink to="/operator">Operator</NavLink>
+            <NavLink to="/operator/traffic">Traffic twin</NavLink>
+            <NavLink to="/operator/chargers">Chargers</NavLink>
+            <NavLink to="/operator/analytics">Analytics</NavLink>
             <NavLink to="/admin">Demo</NavLink>
           </nav>
         </div>

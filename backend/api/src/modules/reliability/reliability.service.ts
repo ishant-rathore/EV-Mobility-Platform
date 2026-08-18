@@ -9,7 +9,7 @@ import {
 interface TelemetryReliabilitySignal {
   chargerId: string;
   status: ChargerOperationalStatus;
-  temperatureCelsius: number;
+  temperatureCelsius?: number;
   recordedAt: string;
   sourceMode?: ReliabilitySourceMode;
   isSimulated?: boolean;

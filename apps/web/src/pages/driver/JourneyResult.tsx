@@ -2,6 +2,7 @@ import { lazy, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { useJourneyStore } from "../../stores/journey.store";
 import type { EvaluatedRoute, RouteEvaluation } from "../../types/journey";
+import { estimateChargingCost, isReservableRecommendation } from "../../utils/booking";
 
 const RouteAlternativesMap = lazy(() =>
   import("../../components/map/RouteAlternativesMap").then((module) => ({
@@ -153,6 +154,12 @@ export function JourneyResult() {
     );
   }
 
+  const recommendation = routeEvaluation.recommendation;
+  const estimatedChargingCost = estimateChargingCost(
+    routeEvaluation.chargingIntelligence?.energyDeficitKwh ?? 0,
+    recommendation?.estimatedPricePerKwh ?? null,
+  );
+
   return (
     <section>
       <p className="text-sm uppercase tracking-[0.2em] text-volt-400">
@@ -214,20 +221,35 @@ export function JourneyResult() {
             routeEvaluation.chargingIntelligence.primary ? (
               <div className="mt-3 text-sm text-slate-200">
                 <p>
-                  Primary: {routeEvaluation.chargingIntelligence.primary.stationName} ·{" "}
-                  {routeEvaluation.chargingIntelligence.primary.connectorType} ·{" "}
+                  Primary:{" "}
+                  <Link
+                    className="text-violet-300 underline decoration-dotted"
+                    to={`/chargers/${routeEvaluation.chargingIntelligence.primary.chargerId}`}
+                  >
+                    {routeEvaluation.chargingIntelligence.primary.stationName}
+                  </Link>{" "}
+                  · {routeEvaluation.chargingIntelligence.primary.connectorType} ·{" "}
                   {routeEvaluation.chargingIntelligence.primary.powerKw} kW · reliability{" "}
                   {routeEvaluation.chargingIntelligence.primary.reliability.score}/100.
                 </p>
                 {routeEvaluation.chargingIntelligence.backup ? (
                   <p className="mt-2 text-slate-400">
-                    Backup: {routeEvaluation.chargingIntelligence.backup.stationName} ·{" "}
-                    {routeEvaluation.chargingIntelligence.backup.chargerId} · reliability{" "}
+                    Backup:{" "}
+                    <Link
+                      className="text-violet-300 underline decoration-dotted"
+                      to={`/chargers/${routeEvaluation.chargingIntelligence.backup.chargerId}`}
+                    >
+                      {routeEvaluation.chargingIntelligence.backup.stationName}
+                    </Link>{" "}
+                    · {routeEvaluation.chargingIntelligence.backup.chargerId} · reliability{" "}
                     {routeEvaluation.chargingIntelligence.backup.reliability.score}/100.
                   </p>
                 ) : (
                   <p className="mt-2 text-amber-300">No eligible backup charger is available.</p>
                 )}
+                <Link className="mt-3 inline-block text-sm text-volt-400" to="/journey/live">
+                  Watch this journey live →
+                </Link>
               </div>
             ) : (
               <p className="mt-3 text-sm text-amber-300">
@@ -245,39 +267,64 @@ export function JourneyResult() {
         </aside>
       ) : null}
 
-      {routeEvaluation.recommendation ? (
+      {recommendation ? (
         <aside className="mt-5 rounded-2xl border border-cyan-400/20 bg-cyan-400/10 p-5">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-300">
               Module 08 · Unified recommendation
             </p>
             <span className="rounded-full bg-cyan-400/10 px-2.5 py-1 text-xs font-semibold text-cyan-200">
-              {routeEvaluation.recommendation.sourceMode} · {routeEvaluation.recommendation.status}
+              {recommendation.sourceMode} · {recommendation.status}
             </span>
           </div>
           <p className="mt-3 text-base font-medium text-slate-100">
-            Route: {routeEvaluation.recommendation.recommendedRouteName ?? "No eligible route"}
-            {routeEvaluation.recommendation.recommendedChargerId
-              ? ` · Charger: ${routeEvaluation.recommendation.recommendedChargerId}`
+            Route: {recommendation.recommendedRouteName ?? "No eligible route"}
+            {recommendation.recommendedChargerId
+              ? ` · Charger: ${recommendation.recommendedChargerId}`
               : " · No charging stop"}
           </p>
-          {routeEvaluation.recommendation.backupChargerId ? (
+          {recommendation.backupChargerId ? (
             <p className="mt-1 text-sm text-slate-300">
-              Backup charger: {routeEvaluation.recommendation.backupChargerId}
+              Backup charger: {recommendation.backupChargerId}
             </p>
           ) : null}
+          <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {[
+              ["Estimated ETA", recommendation.estimatedEtaMinutes === null ? "Not available" : `${recommendation.estimatedEtaMinutes} min`],
+              ["Arrival SOC", recommendation.estimatedArrivalSocPercent === null ? "Not available" : `${recommendation.estimatedArrivalSocPercent}%`],
+              ["Estimated wait", recommendation.estimatedWaitMinutes === null ? "Not available" : `${recommendation.estimatedWaitMinutes} min`],
+              ["Estimated price", recommendation.estimatedPricePerKwh === null ? "Not available" : `₹${recommendation.estimatedPricePerKwh}/kWh`],
+              ["Estimated charge cost", estimatedChargingCost === null ? "Not available" : `₹${estimatedChargingCost}`],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-xl bg-slate-950/30 p-3">
+                <dt className="text-xs text-slate-400">{label}</dt>
+                <dd className="mt-1 text-sm font-semibold text-slate-100">{value}</dd>
+              </div>
+            ))}
+          </dl>
           <ul className="mt-3 space-y-1 text-sm text-slate-300">
-            {routeEvaluation.recommendation.reasons.map((reason) => (
+            {recommendation.reasons.map((reason) => (
               <li key={reason}>• {reason}</li>
             ))}
           </ul>
-          {routeEvaluation.recommendation.warnings.length > 0 ? (
+          {recommendation.warnings.length > 0 ? (
             <ul className="mt-3 space-y-1 text-xs text-amber-200">
-              {routeEvaluation.recommendation.warnings.map((warning) => (
+              {recommendation.warnings.map((warning) => (
                 <li key={warning}>Warning: {warning}</li>
               ))}
             </ul>
           ) : null}
+          {isReservableRecommendation(recommendation) ? (
+            <Link
+              className="mt-5 inline-flex rounded-xl bg-cyan-300 px-4 py-2 text-sm font-semibold text-slate-950 hover:text-slate-950"
+              to="/journey/booking"
+            >
+              Reserve this demo charger
+            </Link>
+          ) : null}
+          <p className="mt-3 text-xs text-slate-400">
+            Wait, price, charging cost, range, and availability are simulated estimates—not guarantees.
+          </p>
         </aside>
       ) : null}
 

@@ -10,4 +10,7 @@ REST/MQTT telemetry event
 → UI displays the new primary and explanation
 ```
 
-The current implementation recomputes on the next journey/recommendation request. Automatic WebSocket-driven client refresh is a remaining Module 7 real-time UI task.
+Module 7 emits WebSocket telemetry and fault events immediately. While the Module 10 live
+journey view is active, a primary-charger fault automatically replays the last authoritative
+journey request, Module 8 recomposes the recommendation, and the UI explains whether the
+backup was promoted. The client never invents a replacement charger locally.

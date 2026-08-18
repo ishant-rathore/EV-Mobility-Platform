@@ -1,23 +1,63 @@
 import type { ChargerTelemetry } from "./telemetry.schemas.js";
-import { ingestChargerTelemetry } from "../reliability/reliability.service.js";
-import { WebSocketEvent } from "../../realtime/websocket.events.js";
-import { getWebSocketServer } from "../../realtime/websocket.server.js";
+import type { ReliabilityScore } from "../reliability/reliability.types.js";
+import {
+  getChargerReliability,
+  ingestChargerTelemetry,
+} from "../reliability/reliability.service.js";
 
 const latestByCharger = new Map<string, ChargerTelemetry>();
+const receivedAtByCharger = new Map<string, string>();
+
+export interface TelemetryIngestionResult {
+  telemetry: ChargerTelemetry;
+  reliability: ReliabilityScore;
+  receivedAt: string;
+}
+
+type TelemetryListener = (result: TelemetryIngestionResult) => void;
+const listeners = new Set<TelemetryListener>();
 
 export function recordTelemetry(telemetry: ChargerTelemetry): ChargerTelemetry {
   latestByCharger.set(telemetry.chargerId, telemetry);
   const reliability = ingestChargerTelemetry(telemetry);
-
-  const io = getWebSocketServer();
-  io?.emit(WebSocketEvent.TELEMETRY_UPDATED, telemetry);
-  if (reliability.status === "FAULT" || reliability.status === "OFFLINE") {
-    io?.emit(WebSocketEvent.CHARGER_FAULTED, { chargerId: telemetry.chargerId });
+  const receivedAt = new Date().toISOString();
+  receivedAtByCharger.set(telemetry.chargerId, receivedAt);
+  const result = { telemetry, reliability, receivedAt };
+  for (const listener of listeners) {
+    try {
+      listener(result);
+    } catch {
+      // A dashboard/WebSocket listener must never make validated ingestion fail.
+    }
   }
-
   return telemetry;
 }
 
 export function getLatestTelemetry(chargerId: string): ChargerTelemetry | null {
   return latestByCharger.get(chargerId) ?? null;
+}
+
+export function listTelemetrySnapshots(now: Date = new Date()): TelemetryIngestionResult[] {
+  return [...latestByCharger.entries()]
+    .flatMap(([chargerId, telemetry]) => {
+      const reliability = getChargerReliability(chargerId, now);
+      return reliability
+        ? [{
+            telemetry,
+            reliability,
+            receivedAt: receivedAtByCharger.get(chargerId) ?? telemetry.recordedAt,
+          }]
+        : [];
+    })
+    .sort((left, right) => right.receivedAt.localeCompare(left.receivedAt));
+}
+
+export function subscribeToTelemetry(listener: TelemetryListener): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+export function resetTelemetryStore(): void {
+  latestByCharger.clear();
+  receivedAtByCharger.clear();
 }

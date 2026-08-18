@@ -1,7 +1,13 @@
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
-import pinoHttp from "pino-http";
+import pinoHttpImport from "pino-http";
+
+// pino-http's .d.ts declares `export default` for a CJS-only package with no
+// "exports" map; under NodeNext + "type": "module" TS resolves the import as
+// the module namespace instead of unwrapping it. Runtime shape is correct
+// (verified via the dev server and the request-logging integration tests).
+const pinoHttp = pinoHttpImport as unknown as typeof pinoHttpImport.default;
 import { API_PREFIX, APP_NAME } from "./config/constants.js";
 import { corsOptions } from "./config/cors.js";
 import { errorMiddleware, notFoundMiddleware } from "./middleware/error.middleware.js";

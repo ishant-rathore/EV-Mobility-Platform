@@ -1,3 +1,19 @@
 # MQTT Payloads
 
-Payloads are UTF-8 JSON with `deviceId`, ISO-8601 `timestamp`, `source`, and `isSimulated`. Domain-specific fields are validated by backend telemetry handlers before use. Unknown fields may be ignored; invalid required fields must not be persisted as trustworthy telemetry.
+Payloads are strict UTF-8 JSON. P0 charger telemetry requires `chargerId`, `status`,
+and `sourceMode`; `recordedAt` may be omitted so the backend supplies its receive time.
+Unknown fields and invalid values are rejected before ingestion.
+
+```json
+{
+  "chargerId": "charger-demo-1-ccs2",
+  "status": "CHARGING",
+  "powerKw": 32.4,
+  "temperatureCelsius": 41.2,
+  "sourceMode": "SIMULATOR",
+  "isSimulated": true
+}
+```
+
+Optional measurements must be omitted when unavailable; zero is a real reading, not a
+placeholder. See `docs/09-iot/TELEMETRY_PAYLOADS.md` for the full contract.

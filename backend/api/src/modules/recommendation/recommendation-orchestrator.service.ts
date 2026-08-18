@@ -7,6 +7,7 @@ import {
 import type { ChargingCandidateRecommendation } from "../charging/charging.service.js";
 import type { EvaluatedRoute } from "../routing/routing.types.js";
 import type { DiversificationDecision } from "../traffic/diversification.service.js";
+import { saveRecommendation } from "./recommendation.store.js";
 
 interface ChargingDecisionInput {
   required: boolean;
@@ -57,7 +58,7 @@ export function composeJourneyRecommendation(
       : "MIXED"
     : "LIVE";
 
-  return orchestrateRecommendation({
+  return saveRecommendation(orchestrateRecommendation({
     recommendationId: crypto.randomUUID(),
     generatedAt: context.generatedAt,
     sourceMode,
@@ -88,5 +89,5 @@ export function composeJourneyRecommendation(
     chargingRequired: context.charging.required,
     primaryCharger: toRecommendationCharger(context.charging.primary),
     backupCharger: toRecommendationCharger(context.charging.backup),
-  });
+  }));
 }
