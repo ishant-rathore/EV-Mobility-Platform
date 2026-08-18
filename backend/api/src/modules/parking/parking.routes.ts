@@ -1,10 +1,15 @@
 import { Router } from "express";
-import { parkingQuerySchema } from "./parking.schemas.js";
-import { listParkingBays } from "./parking.service.js";
+import { ParkingController } from "./parking.controller.js";
+import { authenticate, authorize } from "../../middleware/auth.middleware.js";
+import { checkOwnership } from "../../middleware/ownership.middleware.js";
 
 export const parkingRouter = Router();
 
-parkingRouter.get("/", (request, response) => {
-  const query = parkingQuerySchema.parse(request.query);
-  response.json(listParkingBays(query.stationId));
-});
+parkingRouter.get("/locations", ParkingController.listLocations);
+parkingRouter.get("/locations/:id", ParkingController.getLocationById);
+parkingRouter.get("/bays", ParkingController.listBays);
+
+parkingRouter.post("/locations", authenticate, authorize("parking:create"), ParkingController.createLocation);
+parkingRouter.patch("/locations/:id", authenticate, authorize("parking:update"), checkOwnership("parking_location"), ParkingController.updateLocation);
+parkingRouter.post("/bays", authenticate, authorize("parking:create"), ParkingController.createBay);
+parkingRouter.patch("/bays/:id", authenticate, authorize("parking:update"), ParkingController.updateBay);

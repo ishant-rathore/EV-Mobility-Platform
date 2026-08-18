@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 ---
 
@@ -35,3 +36,8 @@ The research layer helps answer:
 ├── PS05_TRAFFIC_INTEGRATION.md
 ├── README.md
 └── SIH_PROBLEM_ANALYSIS.md
+=======
+# Research
+
+Record evidence, sources, assumptions, and evaluation methods for EV consumption, charging behavior, traffic models, competing solutions, and hardware choices here. Prototype heuristics must not be upgraded to production claims without measured validation.
+>>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)

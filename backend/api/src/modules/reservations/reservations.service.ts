@@ -1,1 +1,106 @@
-// TODO: implement module.
+import { prisma } from "../../lib/prisma.js";
+import { AppError } from "../../shared/errors.js";
+
+export class ReservationService {
+  static async list(userId: string, roleName: string, page = 1, limit = 20) {
+    let where: any = {};
+    if (roleName === "DRIVER") {
+      where = { userId };
+    } else if (roleName === "PARKING_OPERATOR") {
+      where = { parkingSlot: { location: { operatorId: userId } } };
+    } else if (roleName === "OPERATOR") {
+      // Station operator: bookings on EV slots at location
+      where = { parkingSlot: { isEvEnabled: true } };
+    }
+    // ADMIN sees all
+
+    const skip = (page - 1) * limit;
+    const [total, reservations] = await Promise.all([
+      prisma.booking.count({ where }),
+      prisma.booking.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          parkingSlot: { include: { location: true, device: true } },
+          payment: true,
+          user: { select: { id: true, name: true, email: true } },
+        },
+        orderBy: { startsAt: "desc" },
+      }),
+    ]);
+
+    return { reservations, meta: { page, limit, total } };
+  }
+
+  static async getById(id: string) {
+    const booking = await prisma.booking.findUnique({
+      where: { id },
+      include: {
+        parkingSlot: { include: { location: true, device: true } },
+        payment: true,
+        user: { select: { id: true, name: true, email: true } },
+      },
+    });
+    if (!booking) {
+      throw new AppError("Reservation not found.", 404, "RESERVATION_NOT_FOUND");
+    }
+    return booking;
+  }
+
+  static async create(userId: string, data: { parkingSlotId: string; startsAt: string; endsAt: string }) {
+    const slot = await prisma.parkingSlot.findUnique({
+      where: { id: data.parkingSlotId },
+    });
+    if (!slot) {
+      throw new AppError("Parking slot not found.", 404, "SLOT_NOT_FOUND");
+    }
+
+    const start = new Date(data.startsAt);
+    const end = new Date(data.endsAt);
+    if (end <= start) {
+      throw new AppError("End time must be after start time.", 400, "INVALID_TIME_RANGE");
+    }
+
+    // Check conflict
+    const conflict = await prisma.booking.findFirst({
+      where: {
+        parkingSlotId: data.parkingSlotId,
+        status: { in: ["CONFIRMED", "ACTIVE", "PENDING"] },
+        OR: [
+          { startsAt: { lte: end }, endsAt: { gte: start } },
+        ],
+      },
+    });
+
+    if (conflict) {
+      throw new AppError("Slot is already reserved for that time range.", 409, "RESERVATION_CONFLICT");
+    }
+
+    return prisma.booking.create({
+      data: {
+        userId,
+        parkingSlotId: data.parkingSlotId,
+        startsAt: start,
+        endsAt: end,
+        status: "CONFIRMED",
+      },
+      include: { parkingSlot: { include: { location: true } } },
+    });
+  }
+
+  static async cancel(id: string) {
+    const booking = await prisma.booking.findUnique({ where: { id } });
+    if (!booking) {
+      throw new AppError("Reservation not found.", 404, "RESERVATION_NOT_FOUND");
+    }
+    if (booking.status === "COMPLETED" || booking.status === "CANCELLED") {
+      throw new AppError("Cannot cancel completed or already cancelled reservation.", 400, "INVALID_STATE");
+    }
+
+    return prisma.booking.update({
+      where: { id },
+      data: { status: "CANCELLED" },
+    });
+  }
+}

@@ -41,5 +41,9 @@
     "@prisma/engines@6.12.0": true,
     "esbuild@0.28.2": true,
     "prisma@6.12.0": true
+  },
+  "dependencies": {
+    "@neondatabase/neon-js": "^0.7.0-beta",
+    "react-router-dom": "^7.18.2"
   }
 }

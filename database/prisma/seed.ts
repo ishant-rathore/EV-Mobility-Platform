@@ -1,9 +1,11 @@
 import { PrismaClient } from "@prisma/client";
 import { seedEvVehicles } from "./seeds/ev-vehicles.seed.js";
+import { seedRbac } from "./seeds/rbac.seed.js";
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await seedRbac(prisma);
   await seedEvVehicles(prisma);
 
   await prisma.chargingStation.upsert({

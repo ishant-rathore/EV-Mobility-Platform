@@ -1,23 +1,91 @@
 import type { ErrorRequestHandler, RequestHandler } from "express";
 import { ZodError } from "zod";
+import { Prisma } from "@prisma/client";
 import { AppError } from "../shared/errors.js";
+import { sendError } from "../shared/response.js";
 
-export const notFoundMiddleware: RequestHandler = (_request, response) => {
-  response.status(404).json({ error: { code: "NOT_FOUND", message: "Route not found" } });
+export const notFoundMiddleware: RequestHandler = (req, res) => {
+  const requestId = (req as any).id;
+  sendError(res, { code: "NOT_FOUND", message: "Route not found." }, 404, requestId ? { requestId } : undefined);
 };
 
-export const errorMiddleware: ErrorRequestHandler = (error, _request, response, _next) => {
+export const errorMiddleware: ErrorRequestHandler = (error, req, res, _next) => {
+  const requestId = (req as any).id;
+  const meta = requestId ? { requestId } : undefined;
+
   if (error instanceof ZodError) {
-    response.status(400).json({
-      error: { code: "VALIDATION_ERROR", message: "Invalid request", details: error.issues },
-    });
-    return;
+    return sendError(
+      res,
+      {
+        code: "VALIDATION_ERROR",
+        message: "Invalid request data.",
+        details: error.issues,
+      },
+      400,
+      meta,
+    );
   }
 
   if (error instanceof AppError) {
-    response.status(error.statusCode).json({ error: { code: error.code, message: error.message } });
-    return;
+    return sendError(
+      res,
+      {
+        code: error.code,
+        message: error.message,
+      },
+      error.statusCode,
+      meta,
+    );
   }
 
-  response.status(500).json({ error: { code: "INTERNAL_ERROR", message: "Unexpected server error" } });
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    if (error.code === "P2002") {
+      return sendError(
+        res,
+        {
+          code: "CONFLICT",
+          message: "A database unique constraint was violated.",
+          details: error.meta,
+        },
+        409,
+        meta,
+      );
+    }
+    if (error.code === "P2025") {
+      return sendError(
+        res,
+        {
+          code: "NOT_FOUND",
+          message: "The requested record was not found.",
+          details: error.meta,
+        },
+        404,
+        meta,
+      );
+    }
+    if (error.code === "P2003") {
+      return sendError(
+        res,
+        {
+          code: "BAD_REQUEST",
+          message: "Foreign key constraint failed.",
+          details: error.meta,
+        },
+        400,
+        meta,
+      );
+    }
+  }
+
+  console.error("Unhandled API Error:", error);
+  return sendError(
+    res,
+    {
+      code: "INTERNAL_ERROR",
+      message: "An unexpected error occurred.",
+    },
+    500,
+    meta,
+  );
 };
+

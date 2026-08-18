@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
+=======
+// TODO: add canonical project models.
+// Core entities: User, Vehicle, Journey, Station, Charger, StationStatus,
+// Reservation, ParkingSpace, ParkingReservation, Payment, IoTDevice,
+// OccupancyEvent, Notification.
+>>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)
 enum ChargerState {
   AVAILABLE
   OCCUPIED
@@ -42,7 +49,13 @@ model User {
   id               String            @id @default(cuid())
   email            String            @unique
   name             String
+  phone            String?
+  passwordHash     String?
+  roleId           String?
+  isActive         Boolean           @default(true)
   createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  role             Role?             @relation(fields: [roleId], references: [id])
   vehicles         EVVehicle[]
   journeys         Journey[]
   bookings         Booking[]
@@ -51,6 +64,43 @@ model User {
   notifications    Notification[]
   reviews          Review[]
   auditLogs        AuditLog[]
+  managedStations  ChargingStation[] @relation("StationOperator")
+  managedParking   ParkingLocation[] @relation("ParkingOperator")
+}
+
+model Role {
+  id           String           @id @default(cuid())
+  name         String           @unique
+  description  String?
+  isSystemRole Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  users        User[]
+  permissions  RolePermission[]
+}
+
+model Permission {
+  id          String           @id @default(cuid())
+  resource    String
+  action      String
+  description String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  roles       RolePermission[]
+
+  @@unique([resource, action])
+}
+
+model RolePermission {
+  id           String     @id @default(cuid())
+  roleId       String
+  permissionId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
 }
 
 model EVVehicle {
@@ -74,35 +124,35 @@ model EVVehicle {
 }
 
 model Journey {
-  id              String           @id @default(cuid())
-  userId          String
-  vehicleId       String
-  originLabel     String
+  id               String           @id @default(cuid())
+  userId           String
+  vehicleId        String
+  originLabel      String
   destinationLabel String
-  status          String           @default("PLANNED")
-  createdAt       DateTime         @default(now())
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  vehicle         EVVehicle        @relation(fields: [vehicleId], references: [id])
-  routes          Route[]
-  recommendations Recommendation[]
+  status           String           @default("PLANNED")
+  createdAt        DateTime         @default(now())
+  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicle          EVVehicle        @relation(fields: [vehicleId], references: [id])
+  routes           Route[]
+  recommendations  Recommendation[]
 }
 
 model Route {
-  id                 String            @id @default(cuid())
-  journeyId          String
-  distanceKm         Float
-  durationMinutes    Float
-  energyRequiredKwh  Float
-  congestionScore    Float
-  geometryJson       Json?
-  journey            Journey           @relation(fields: [journeyId], references: [id], onDelete: Cascade)
-  trafficSnapshots   TrafficSnapshot[]
-  segments           RouteSegment[]
-  recommendations    Recommendation[]
+  id                String            @id @default(cuid())
+  journeyId         String
+  distanceKm        Float
+  durationMinutes   Float
+  energyRequiredKwh Float
+  congestionScore   Float
+  geometryJson      Json?
+  journey           Journey           @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  trafficSnapshots  TrafficSnapshot[]
+  segments          RouteSegment[]
+  recommendations   Recommendation[]
 }
 
 model RouteSegment {
-  id                 String       @id @default(cuid())
+  id                 String   @id @default(cuid())
   routeId            String
   segmentId          String
   name               String
@@ -112,39 +162,44 @@ model RouteSegment {
   vehicleEligibility String[]
   freeFlowSpeedKph   Float
   distanceKm         Float
-  route              Route        @relation(fields: [routeId], references: [id], onDelete: Cascade)
+  route              Route    @relation(fields: [routeId], references: [id], onDelete: Cascade)
 
   @@unique([routeId, segmentId])
   @@index([segmentId])
 }
 
 model TrafficSnapshot {
-  id                   String   @id @default(cuid())
-  routeId              String?
-  segmentId            String
-  observedSpeedKph     Float
-  occupancyPercent     Float
-  congestionScore      Float
-  predictedLoad        Float?
-  capacity             Float?
-  vehicleEligibility   String[]
-  sourceMode           String   @default("DEMO")
-  capturedAt           DateTime @default(now())
-  route                Route?   @relation(fields: [routeId], references: [id], onDelete: SetNull)
+  id                 String   @id @default(cuid())
+  routeId            String?
+  segmentId          String
+  observedSpeedKph   Float
+  occupancyPercent   Float
+  congestionScore    Float
+  predictedLoad      Float?
+  capacity           Float?
+  vehicleEligibility String[]
+  sourceMode         String   @default("DEMO")
+  capturedAt         DateTime @default(now())
+  route              Route?   @relation(fields: [routeId], references: [id], onDelete: SetNull)
 
   @@index([segmentId, capturedAt])
 }
 
 model ChargingStation {
   id              String           @id @default(cuid())
+  operatorId      String?
   name            String
   latitude        Float
   longitude       Float
   address         String?
   createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  operator        User?            @relation("StationOperator", fields: [operatorId], references: [id])
   chargers        Charger[]
   recommendations Recommendation[]
   reviews         Review[]
+
+  @@index([operatorId])
 }
 
 model Charger {
@@ -172,12 +227,12 @@ model ChargerTelemetry {
 }
 
 model ReliabilitySnapshot {
-  id         String   @id @default(cuid())
-  chargerId  String
-  score      Float
-  grade      String
+  id           String   @id @default(cuid())
+  chargerId    String
+  score        Float
+  grade        String
   calculatedAt DateTime @default(now())
-  charger    Charger  @relation(fields: [chargerId], references: [id], onDelete: Cascade)
+  charger      Charger  @relation(fields: [chargerId], references: [id], onDelete: Cascade)
 }
 
 model Recommendation {
@@ -194,35 +249,41 @@ model Recommendation {
 }
 
 model ChargingSession {
-  id          String   @id @default(cuid())
-  userId      String
-  chargerId   String
-  startedAt   DateTime @default(now())
-  endedAt     DateTime?
-  energyKwh   Float?
-  cost        Float?
-  user        User     @relation(fields: [userId], references: [id])
-  charger     Charger  @relation(fields: [chargerId], references: [id])
+  id        String    @id @default(cuid())
+  userId    String
+  chargerId String
+  startedAt DateTime  @default(now())
+  endedAt   DateTime?
+  energyKwh Float?
+  cost      Float?
+  user      User      @relation(fields: [userId], references: [id])
+  charger   Charger   @relation(fields: [chargerId], references: [id])
 }
 
 model ParkingLocation {
-  id        String        @id @default(cuid())
-  name      String
-  latitude  Float
-  longitude Float
-  slots     ParkingSlot[]
+  id         String        @id @default(cuid())
+  operatorId String?
+  name       String
+  latitude   Float
+  longitude  Float
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  operator   User?         @relation("ParkingOperator", fields: [operatorId], references: [id])
+  slots      ParkingSlot[]
+
+  @@index([operatorId])
 }
 
 model ParkingSlot {
-  id           String            @id @default(cuid())
-  locationId   String
-  label        String
-  isEvEnabled  Boolean           @default(false)
-  location     ParkingLocation   @relation(fields: [locationId], references: [id], onDelete: Cascade)
-  bookings     Booking[]
-  occupancies  SlotOccupancy[]
-  events       OccupancyEvent[]
-  device       IoTDevice?
+  id          String           @id @default(cuid())
+  locationId  String
+  label       String
+  isEvEnabled Boolean          @default(false)
+  location    ParkingLocation  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  bookings    Booking[]
+  occupancies SlotOccupancy[]
+  events      OccupancyEvent[]
+  device      IoTDevice?
 
   @@unique([locationId, label])
 }
@@ -253,12 +314,12 @@ model Payment {
 }
 
 model IoTDevice {
-  id           String          @id @default(cuid())
+  id            String          @id @default(cuid())
   parkingSlotId String?         @unique
-  externalId   String          @unique
-  lastSeenAt   DateTime?
-  parkingSlot  ParkingSlot?    @relation(fields: [parkingSlotId], references: [id], onDelete: SetNull)
-  commands     DeviceCommand[]
+  externalId    String          @unique
+  lastSeenAt    DateTime?
+  parkingSlot   ParkingSlot?    @relation(fields: [parkingSlotId], references: [id], onDelete: SetNull)
+  commands      DeviceCommand[]
 }
 
 model SlotOccupancy {
@@ -278,23 +339,23 @@ model OccupancyEvent {
 }
 
 model DeviceCommand {
-  id        String    @id @default(cuid())
-  deviceId  String
-  command   String
-  status    String    @default("PENDING")
-  createdAt DateTime  @default(now())
+  id          String    @id @default(cuid())
+  deviceId    String
+  command     String
+  status      String    @default("PENDING")
+  createdAt   DateTime  @default(now())
   completedAt DateTime?
-  device    IoTDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  device      IoTDevice @relation(fields: [deviceId], references: [id], onDelete: Cascade)
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   title     String
   body      String
   readAt    DateTime?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Review {
@@ -309,12 +370,17 @@ model Review {
 }
 
 model AuditLog {
-  id         String   @id @default(cuid())
-  userId     String?
-  action     String
-  entityType String
-  entityId   String?
-  metadata   Json?
-  createdAt  DateTime @default(now())
-  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id           String   @id @default(cuid())
+  actorUserId  String?
+  action       String
+  resourceType String
+  resourceId   String?
+  metadata     Json?
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime @default(now())
+  actorUser    User?    @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorUserId])
+  @@index([resourceType, resourceId])
 }

@@ -1,0 +1,305 @@
+openapi: 3.1.0
+info:
+  title: EV Mobility Platform API
+  version: 1.0.0
+  description: >
+    Production-grade, secure REST API foundation for the EV Mobility Platform (VoltTwin / Pay&Park).
+    Provides authentication, role-based access control (RBAC), multi-tenant resource ownership,
+    journey & battery energy estimation, charging reservation, parking, IoT smart locks, payments,
+    and real-time analytics.
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local Development Server
+  - url: https://api.volttwin.ev/api/v1
+    description: Production Environment
+
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Returns service status and application name
+      responses:
+        "200":
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessEnvelope"
+
+  /health/ready:
+    get:
+      summary: Readiness probe
+      description: Verifies database connectivity and readiness
+      responses:
+        "200":
+          description: Service and database are ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessEnvelope"
+
+  /auth/register:
+    post:
+      summary: Register a new Driver account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, name, password]
+              properties:
+                email: { type: string, format: email }
+                name: { type: string }
+                password: { type: string, minLength: 6 }
+                phone: { type: string }
+      responses:
+        "201":
+          description: User registered successfully
+        "409":
+          description: Email already registered
+
+  /auth/login:
+    post:
+      summary: Login and obtain JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200":
+          description: Login successful, returns Bearer token
+        "401":
+          description: Invalid credentials
+
+  /auth/me:
+    get:
+      summary: Get currently authenticated user profile
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: User profile
+        "401":
+          description: Unauthorized
+
+  /vehicles:
+    get:
+      summary: List authenticated driver's vehicles
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Array of EV vehicles
+    post:
+      summary: Create new EV vehicle profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EVVehicleInput"
+      responses:
+        "201":
+          description: Vehicle created
+
+  /vehicles/{id}:
+    get:
+      summary: Get EV vehicle details (enforces resource ownership)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Vehicle details
+        "403":
+          description: Forbidden (IDOR protection)
+
+  /journeys/plan:
+    post:
+      summary: Plan journey with energy and charging requirements
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [vehicleId, originLabel, destinationLabel]
+              properties:
+                vehicleId: { type: string }
+                originLabel: { type: string }
+                destinationLabel: { type: string }
+      responses:
+        "201":
+          description: Journey planned with recommendations
+
+  /stations:
+    get:
+      summary: Discover and list charging stations
+      responses:
+        "200":
+          description: List of stations
+    post:
+      summary: Create charging station (Operator / Admin only)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StationInput"
+      responses:
+        "201":
+          description: Station created
+        "403":
+          description: Insufficient permissions
+
+  /chargers:
+    post:
+      summary: Create charger for station (Operator / Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Charger created
+
+  /parking/locations:
+    get:
+      summary: List parking locations
+      responses:
+        "200":
+          description: Parking locations list
+    post:
+      summary: Create parking location (Parking Operator / Admin)
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Location created
+
+  /reservations:
+    post:
+      summary: Reserve parking / charging slot (verifies conflicts)
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [parkingSlotId, startsAt, endsAt]
+              properties:
+                parkingSlotId: { type: string }
+                startsAt: { type: string, format: date-time }
+                endsAt: { type: string, format: date-time }
+      responses:
+        "201":
+          description: Slot reserved
+        "409":
+          description: Slot conflict
+
+  /payments/create:
+    post:
+      summary: Verify and process reservation payment
+      security:
+        - BearerAuth: []
+      responses:
+        "201":
+          description: Payment completed
+
+  /iot/devices/{id}/unlock:
+    post:
+      summary: Authorized physical smart barrier / lock release
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Smart lock command dispatched
+        "403":
+          description: Unauthorized device access
+
+  /analytics:
+    get:
+      summary: Retrieve role-scoped dashboard metrics
+      security:
+        - BearerAuth: []
+      responses:
+        "200":
+          description: Aggregated platform / operator / driver statistics
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    SuccessEnvelope:
+      type: object
+      required: [success, data]
+      properties:
+        success: { type: boolean, example: true }
+        data: { type: object }
+        meta: { type: object }
+
+    ErrorEnvelope:
+      type: object
+      required: [success, error]
+      properties:
+        success: { type: boolean, example: false }
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string }
+            message: { type: string }
+            details: { type: object }
+        meta:
+          type: object
+          properties:
+            requestId: { type: string }
+
+    EVVehicleInput:
+      type: object
+      required: [name, vehicleClass, connectorTypes, batteryCapacityKwh]
+      properties:
+        name: { type: string }
+        vehicleClass: { type: string, enum: [TWO_WHEELER, THREE_WHEELER, CAR, BUS, TRUCK] }
+        connectorTypes: { type: array, items: { type: string } }
+        batteryCapacityKwh: { type: number }
+        batteryHealthPercent: { type: number, default: 100 }
+        efficiencyWhPerKm: { type: number, default: 140 }
+        currentSocPercent: { type: number, default: 80 }
+        reserveSocPercent: { type: number, default: 10 }
+        isDefault: { type: boolean, default: true }
+
+    StationInput:
+      type: object
+      required: [name, latitude, longitude]
+      properties:
+        name: { type: string }
+        latitude: { type: number }
+        longitude: { type: number }
+        address: { type: string }

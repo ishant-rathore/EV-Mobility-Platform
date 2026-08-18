@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 ---
 
@@ -43,3 +44,8 @@ The requirements documents define:
 ├── USER_ROLES.md
 ├── USER_ROLES_SUMMARY.md
 └── USER_STORIES.md
+=======
+# Requirements
+
+Functional, non-functional, acceptance, and traceability documents belong here.
+>>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)
