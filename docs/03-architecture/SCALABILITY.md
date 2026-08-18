@@ -1,11 +1,34 @@
-# Scalability
 
-**Documentation area:** 03-architecture
+---
 
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
+# 8. `SCALABILITY.md`
 
-## Purpose
-Define the canonical project guidance for this topic.
+```md
+# ⚡ EV Mobility Platform — Scalability Architecture
 
-## Status
-Scaffold / team-owned document.
+**Version:** 1.0  
+**Status:** SIH 2026 MVP → Future Scale
+
+---
+
+# 1. Scalability Goal
+
+The architecture should allow the MVP to evolve from a hackathon prototype into a larger mobility platform.
+
+---
+
+# 2. Modular Architecture
+
+Core services are separated logically:
+
+```text
+Auth
+EV
+Journey
+Energy
+Charging
+Reservation
+Parking
+Payment
+IoT
+Analytics
