@@ -1,11 +1,35 @@
-# Tech Stack
+# ⚡ EV Mobility Platform — Technology Stack
 
-**Documentation area:** 03-architecture
+**Project:** EV Mobility Platform  
+**Version:** 1.0  
+**Status:** SIH 2026 MVP  
+**Architecture:** Modular Monolith + IoT Event Layer
 
-System, software, component, data-flow, deployment, IoT, real-time, security, scalability, and technology architecture.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+# 1. Technology Stack Overview
 
-## Status
-Scaffold / team-owned document.
+The EV Mobility Platform uses a modern web, backend, database and IoT technology stack.
+
+```text
+┌──────────────────────────────────────────────┐
+│                 FRONTEND                     │
+│ React + TypeScript + Vite + Tailwind CSS    │
+└──────────────────────┬───────────────────────┘
+                       │ HTTPS / REST
+                       ▼
+┌──────────────────────────────────────────────┐
+│                  BACKEND                     │
+│ Node.js + Express + TypeScript              │
+└──────────────────────┬───────────────────────┘
+                       │
+             ┌─────────┴─────────┐
+             ▼                   ▼
+┌─────────────────────┐   ┌────────────────────┐
+│      DATABASE       │   │       IoT           │
+│ PostgreSQL + Prisma │   │ MQTT + ESP32       │
+└─────────────────────┘   └─────────┬──────────┘
+                                    │
+                              ┌─────┴─────┐
+                              ▼           ▼
+                           Sensors      Lock
