@@ -1,16 +1,16 @@
+# EV Mobility Platform — User Roles
+
+**Version:** 1.0  
+**Status:** Frozen SIH 2026 MVP
 
 ---
-
-## 11. `USER_ROLES.md`
-
-```md
-# EV Mobility Platform — User Roles
 
 ## 1. EV Driver
 
 **Primary user**
 
 ### Responsibilities
+
 - Manage EV profile
 - Plan journeys
 - Check battery
@@ -40,6 +40,7 @@
 # 2. Charging Station Operator
 
 ### Responsibilities
+
 - Manage charging stations
 - Monitor chargers
 - View reservations
@@ -59,6 +60,7 @@
 # 3. Parking Operator
 
 ### Responsibilities
+
 - Manage parking bays
 - Monitor occupancy
 - Manage IoT devices
@@ -77,6 +79,7 @@
 # 4. Admin
 
 ### Responsibilities
+
 - Manage users
 - Manage operators
 - Manage stations
@@ -92,13 +95,59 @@ Administrative access to platform configuration and management.
 
 # 5. Future Role — Fleet Manager
 
-Future capability.
+**Status:** Future capability
 
-Possible responsibilities:
+### Possible Responsibilities
 
 - Manage EV fleet
 - Optimize fleet routes
 - Monitor charging
 - Analyze vehicle utilization
 
-Not required for P0 MVP.
+**Not required for P0 MVP.**
+
+---
+
+# 6. Role Overview
+
+| Role | Primary Responsibility | MVP |
+|---|---|:---:|
+| **EV Driver** | Plan, charge, park and complete journeys | ✅ P0 |
+| **Charging Station Operator** | Manage charging infrastructure | ✅ P0 |
+| **Parking Operator** | Manage parking and IoT infrastructure | ✅ P0 |
+| **Admin** | Manage platform and system operations | ✅ P0 |
+| **Fleet Manager** | Fleet optimization and management | ⏳ Future |
+
+---
+
+# 7. Role Hierarchy
+
+```text
+                    ADMIN
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+          ▼                       ▼
+CHARGING STATION OPERATOR   PARKING OPERATOR
+          │                       │
+          ▼                       ▼
+      CHARGERS                PARKING + IoT
+          │                       │
+          └───────────┬───────────┘
+                      │
+                      ▼
+                  EV DRIVER
+                      │
+                      ▼
+             EV JOURNEY
+                      │
+        ┌─────────────┼─────────────┐
+        ▼             ▼             ▼
+      ROUTE        CHARGING       PARKING
+        │             │             │
+        └─────────────┼─────────────┘
+                      ▼
+                   PAYMENT
+                      │
+                      ▼
+                  IoT ACCESS
