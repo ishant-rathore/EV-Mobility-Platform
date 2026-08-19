@@ -5,6 +5,7 @@ import { authenticate, authorize } from "../../middleware/auth.middleware.js";
 export const chargersRouter = Router();
 
 chargersRouter.get("/", ChargerController.list);
+chargersRouter.get("/mine", authenticate, authorize("charger:read"), ChargerController.listMine);
 chargersRouter.get("/:id", ChargerController.getById);
 
 chargersRouter.post("/", authenticate, authorize("charger:create"), ChargerController.create);

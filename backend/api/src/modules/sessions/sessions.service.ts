@@ -1,9 +1,14 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors.js";
+import { isInfrastructureOperatorRole } from "../../shared/roles.js";
 
 export class SessionService {
   static async list(userId: string, roleName: string, page = 1, limit = 20) {
-    const where = (roleName === "ADMIN" || roleName === "OPERATOR") ? {} : { userId };
+    const where = roleName === "ADMIN"
+      ? {}
+      : isInfrastructureOperatorRole(roleName)
+        ? { charger: { station: { operatorId: userId } } }
+        : { userId };
     const skip = (page - 1) * limit;
     const [total, sessions] = await Promise.all([
       prisma.chargingSession.count({ where }),
@@ -26,7 +31,8 @@ export class SessionService {
     if (!session) {
       throw new AppError("Charging session not found.", 404, "SESSION_NOT_FOUND");
     }
-    if (roleName !== "ADMIN" && roleName !== "OPERATOR" && session.userId !== userId) {
+    const managesSession = isInfrastructureOperatorRole(roleName) && session.charger.station.operatorId === userId;
+    if (roleName !== "ADMIN" && !managesSession && session.userId !== userId) {
       throw new AppError("You do not have access to this session.", 403, "FORBIDDEN");
     }
     return session;

@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 export function AppLayout({ children }: PropsWithChildren) {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100">
+    <div className="public-app min-h-screen bg-slate-950 text-slate-100">
       <header className="border-b border-white/10 bg-slate-950/90">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-4">
           <NavLink to="/" className="text-lg font-semibold tracking-tight text-volt-400">

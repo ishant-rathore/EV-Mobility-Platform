@@ -42,6 +42,11 @@ apiRouter.use("/iot", iotRouter);
 apiRouter.use("/notifications", notificationsRouter);
 apiRouter.use("/analytics", analyticsRouter);
 
+// Legacy demo routes that previously shared core paths remain reachable for
+// non-conflicting methods while the authenticated REST resources stay primary.
+apiRouter.use("/journeys", journeyRouter);
+apiRouter.use("/chargers", chargingRouter);
+
 // Existing compatibility / simulator endpoints
 apiRouter.use("/ev", evRouter);
 apiRouter.use("/journey-eval", journeyRouter);
@@ -52,8 +57,4 @@ apiRouter.use("/bookings", bookingRouter);
 apiRouter.use("/recommendations", recommendationRouter);
 apiRouter.use("/reliability", reliabilityRouter);
 apiRouter.use("/telemetry", telemetryRouter);
-<<<<<<< HEAD
 apiRouter.use("/admin/demo", demoControlRouter);
-=======
-
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)

@@ -5,11 +5,11 @@ import { sendSuccess } from "../../shared/response.js";
 import type { AuthRequest } from "../../middleware/auth.middleware.js";
 
 export class IoTController {
-  static async list(req: Request, res: Response, next: NextFunction) {
+  static async list(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
-      const result = await IoTDeviceService.listDevices(page, limit);
+      const result = await IoTDeviceService.listDevices(req.user!.id, req.user!.roleName || "DRIVER", page, limit);
       return sendSuccess(res, result.devices, 200, result.meta);
     } catch (error) {
       next(error);

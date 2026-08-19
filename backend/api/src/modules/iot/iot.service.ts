@@ -1,12 +1,19 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors.js";
+import { isInfrastructureOperatorRole } from "../../shared/roles.js";
 
 export class IoTDeviceService {
-  static async listDevices(page = 1, limit = 50) {
+  static async listDevices(userId: string, roleName: string, page = 1, limit = 50) {
+    const where = roleName === "ADMIN"
+      ? {}
+      : isInfrastructureOperatorRole(roleName)
+        ? { parkingSlot: { location: { operatorId: userId } } }
+        : { id: "__no_devices__" };
     const skip = (page - 1) * limit;
     const [total, devices] = await Promise.all([
-      prisma.ioTDevice.count(),
+      prisma.ioTDevice.count({ where }),
       prisma.ioTDevice.findMany({
+        where,
         skip,
         take: limit,
         include: { parkingSlot: { include: { location: true } } },
@@ -31,7 +38,7 @@ export class IoTDeviceService {
 
     if (roleName === "ADMIN") {
       isAuthorized = true;
-    } else if (roleName === "PARKING_OPERATOR") {
+    } else if (isInfrastructureOperatorRole(roleName)) {
       if (device.parkingSlot?.location?.operatorId === userId) {
         isAuthorized = true;
       }

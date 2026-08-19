@@ -3,6 +3,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { prisma } from "../lib/prisma.js";
 import { env } from "../config/env.js";
 import { sendError } from "../shared/response.js";
+import { isInfrastructureOperatorPermission, isInfrastructureOperatorRole } from "../shared/roles.js";
 
 const JWT_SECRET: Secret = (env.JWT_SECRET || "ev_mobility_jwt_secret_demo") as Secret;
 
@@ -69,6 +70,17 @@ export const authorize = (requiredPermission: string) => {
       }
 
       const [resource, action] = requiredPermission.split(":");
+
+      // OPERATOR and PARKING_OPERATOR remain accepted aliases while accounts are
+      // migrated to the unified INFRASTRUCTURE_OPERATOR role.
+      if (
+        resource &&
+        action &&
+        isInfrastructureOperatorRole(req.user.roleName) &&
+        isInfrastructureOperatorPermission(resource, action)
+      ) {
+        return next();
+      }
 
       const hasPermission = await prisma.rolePermission.findFirst({
         where: {

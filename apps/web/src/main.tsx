@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./App";
 import { QueryProvider } from "./app/providers/QueryProvider";
+import { OperatorAuthProvider } from "./app/providers/OperatorAuthProvider";
 import "./styles/index.css";
 
 const root = document.getElementById("root");
@@ -14,9 +15,11 @@ if (!root) {
 createRoot(root).render(
   <StrictMode>
     <QueryProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <OperatorAuthProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </OperatorAuthProvider>
     </QueryProvider>
   </StrictMode>,
 );

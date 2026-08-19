@@ -2,6 +2,30 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors.js";
 
 export class ParkingService {
+  static async listMyLocations(operatorId: string, isAdmin: boolean, page = 1, limit = 20) {
+    const where = isAdmin ? {} : { operatorId };
+    const skip = (page - 1) * limit;
+    const [total, locations] = await Promise.all([
+      prisma.parkingLocation.count({ where }),
+      prisma.parkingLocation.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          slots: {
+            include: {
+              device: true,
+              occupancies: { take: 1, orderBy: { observedAt: "desc" } },
+            },
+          },
+          operator: { select: { id: true, name: true, email: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+    return { locations, meta: { page, limit, total } };
+  }
+
   static async listLocations(page = 1, limit = 20) {
     const skip = (page - 1) * limit;
     const [total, locations] = await Promise.all([
@@ -51,6 +75,30 @@ export class ParkingService {
         skip,
         take: limit,
         include: { location: true, device: true },
+        orderBy: { label: "asc" },
+      }),
+    ]);
+    return { bays, meta: { page, limit, total } };
+  }
+
+  static async listMyBays(operatorId: string, isAdmin: boolean, locationId?: string, page = 1, limit = 50) {
+    const where = {
+      ...(locationId ? { locationId } : {}),
+      ...(isAdmin ? {} : { location: { operatorId } }),
+    };
+    const skip = (page - 1) * limit;
+    const [total, bays] = await Promise.all([
+      prisma.parkingSlot.count({ where }),
+      prisma.parkingSlot.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          location: true,
+          device: true,
+          occupancies: { take: 1, orderBy: { observedAt: "desc" } },
+          bookings: { take: 1, orderBy: { startsAt: "desc" } },
+        },
         orderBy: { label: "asc" },
       }),
     ]);

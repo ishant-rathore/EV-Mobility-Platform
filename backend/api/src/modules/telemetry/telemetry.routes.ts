@@ -6,6 +6,8 @@ import {
   listTelemetrySnapshots,
   recordTelemetry,
 } from "./telemetry.service.js";
+import { authenticate, authorize, type AuthRequest } from "../../middleware/auth.middleware.js";
+import { prisma } from "../../lib/prisma.js";
 
 export const telemetryRouter = Router();
 
@@ -19,6 +21,31 @@ telemetryRouter.get("/", (_request, response) => {
 
 telemetryRouter.post("/", (request, response) => {
   response.status(202).json(recordTelemetry(chargerTelemetrySchema.parse(request.body)));
+});
+
+telemetryRouter.get("/mine", authenticate, authorize("charger:read"), async (request: AuthRequest, response, next) => {
+  try {
+    const snapshots = listTelemetrySnapshots();
+    if (request.user!.roleName === "ADMIN") {
+      return response.json({
+        source: "normalized-telemetry",
+        disclaimer: "Telemetry is limited to the authenticated operator's assigned chargers.",
+        chargers: snapshots,
+      });
+    }
+    const assigned = await prisma.charger.findMany({
+      where: { station: { operatorId: request.user!.id } },
+      select: { id: true },
+    });
+    const assignedIds = new Set(assigned.map(({ id }) => id));
+    return response.json({
+      source: "normalized-telemetry",
+      disclaimer: "Telemetry is limited to the authenticated operator's assigned chargers.",
+      chargers: snapshots.filter(({ telemetry }) => assignedIds.has(telemetry.chargerId)),
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 telemetryRouter.get("/:chargerId", (request, response) => {

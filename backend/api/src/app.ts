@@ -59,7 +59,3 @@ app.use(notFoundMiddleware);
 
 // 8. Global error handler
 app.use(errorMiddleware);
-<<<<<<< HEAD
-=======
-
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)

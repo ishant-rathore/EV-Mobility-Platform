@@ -11,4 +11,7 @@
 
 body { margin: 0; min-width: 320px; min-height: 100vh; }
 a { transition: color 160ms ease; }
-a:hover { color: #5ee7a5; }
+.public-app a:hover { color: #5ee7a5; }
+.operator-app { color-scheme: light; }
+.operator-app button, .operator-app input, .operator-app select { font: inherit; }
+.operator-app :focus-visible { outline: 2px solid #2563EB; outline-offset: 2px; }

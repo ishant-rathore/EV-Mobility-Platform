@@ -2,6 +2,22 @@ import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors.js";
 
 export class StationService {
+  static async listMine(operatorId: string, isAdmin: boolean, page = 1, limit = 20) {
+    const where = isAdmin ? {} : { operatorId };
+    const skip = (page - 1) * limit;
+    const [total, stations] = await Promise.all([
+      prisma.chargingStation.count({ where }),
+      prisma.chargingStation.findMany({
+        where,
+        skip,
+        take: limit,
+        include: { chargers: true, operator: { select: { id: true, name: true, email: true } } },
+        orderBy: { createdAt: "desc" },
+      }),
+    ]);
+    return { stations, meta: { page, limit, total } };
+  }
+
   static async list(page = 1, limit = 20) {
     const skip = (page - 1) * limit;
     const [total, stations] = await Promise.all([

@@ -1,16 +1,14 @@
 import { prisma } from "../../lib/prisma.js";
 import { AppError } from "../../shared/errors.js";
+import { isInfrastructureOperatorRole } from "../../shared/roles.js";
 
 export class ReservationService {
   static async list(userId: string, roleName: string, page = 1, limit = 20) {
     let where: any = {};
     if (roleName === "DRIVER") {
       where = { userId };
-    } else if (roleName === "PARKING_OPERATOR") {
+    } else if (isInfrastructureOperatorRole(roleName)) {
       where = { parkingSlot: { location: { operatorId: userId } } };
-    } else if (roleName === "OPERATOR") {
-      // Station operator: bookings on EV slots at location
-      where = { parkingSlot: { isEvEnabled: true } };
     }
     // ADMIN sees all
 

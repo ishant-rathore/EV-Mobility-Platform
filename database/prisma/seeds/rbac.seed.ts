@@ -6,6 +6,7 @@ export async function seedRbac(prisma: PrismaClient) {
   // 1. Roles
   const roles = [
     { name: "DRIVER", description: "Standard EV Driver", isSystemRole: true },
+    { name: "INFRASTRUCTURE_OPERATOR", description: "Unified charging and parking infrastructure operator", isSystemRole: true },
     { name: "OPERATOR", description: "Charging Station Operator", isSystemRole: true },
     { name: "PARKING_OPERATOR", description: "Parking Infrastructure Operator", isSystemRole: true },
     { name: "ADMIN", description: "Platform Administrator", isSystemRole: true },
@@ -74,6 +75,14 @@ export async function seedRbac(prisma: PrismaClient) {
   }
 
   // 3. Role-Permission mappings
+  const infrastructurePermissions = [
+    "station:read", "station:create", "station:update", "station:delete", "station:manage",
+    "charger:read", "charger:create", "charger:update", "charger:manage",
+    "parking:read", "parking:create", "parking:update", "parking:manage",
+    "reservation:read", "session:read", "session:manage", "payment:read",
+    "iot:read", "iot:unlock", "iot:lock", "iot:manage", "analytics:read", "device:manage",
+  ];
+
   const rolePermissionMap: Record<string, string[]> = {
     DRIVER: [
       "vehicle:create", "vehicle:read", "vehicle:update", "vehicle:delete",
@@ -82,16 +91,10 @@ export async function seedRbac(prisma: PrismaClient) {
       "reservation:create", "reservation:read", "reservation:cancel",
       "parking:read", "payment:read", "payment:create", "session:read", "iot:unlock"
     ],
-    OPERATOR: [
-      "station:read", "station:create", "station:update", "station:manage",
-      "charger:read", "charger:create", "charger:update", "charger:manage",
-      "reservation:read", "session:read", "analytics:read"
-    ],
-    PARKING_OPERATOR: [
-      "parking:read", "parking:create", "parking:update", "parking:manage",
-      "reservation:read", "session:read",
-      "iot:read", "iot:unlock", "iot:lock", "iot:manage", "analytics:read"
-    ],
+    INFRASTRUCTURE_OPERATOR: infrastructurePermissions,
+    // Legacy roles intentionally retain compatibility during the account migration.
+    OPERATOR: infrastructurePermissions,
+    PARKING_OPERATOR: infrastructurePermissions,
     ADMIN: permissionsData.map(p => `${p.resource}:${p.action}`) // All permissions
   };
 

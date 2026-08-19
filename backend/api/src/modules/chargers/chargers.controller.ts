@@ -26,6 +26,17 @@ export class ChargerController {
     }
   }
 
+  static async listMine(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = Math.min(100, parseInt(req.query.limit as string) || 20);
+      const result = await ChargerService.listMine(req.user!.id, req.user!.roleName === "ADMIN", page, limit);
+      return sendSuccess(res, result.chargers, 200, result.meta);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async create(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const input = createChargerSchema.parse(req.body);

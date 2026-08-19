@@ -25,6 +25,17 @@ export class ParkingController {
     }
   }
 
+  static async listMyLocations(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = Math.min(100, parseInt(req.query.limit as string) || 20);
+      const result = await ParkingService.listMyLocations(req.user!.id, req.user!.roleName === "ADMIN", page, limit);
+      return sendSuccess(res, result.locations, 200, result.meta);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async createLocation(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const input = createLocationSchema.parse(req.body);
@@ -63,6 +74,18 @@ export class ParkingController {
       const isAdmin = req.user!.roleName === "ADMIN";
       const bay = await ParkingService.createBay(req.user!.id, isAdmin, input);
       return sendSuccess(res, bay, 201);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async listMyBays(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+      const locationId = req.query.locationId as string | undefined;
+      const result = await ParkingService.listMyBays(req.user!.id, req.user!.roleName === "ADMIN", locationId, page, limit);
+      return sendSuccess(res, result.bays, 200, result.meta);
     } catch (error) {
       next(error);
     }

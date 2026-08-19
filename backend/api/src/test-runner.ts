@@ -7,6 +7,7 @@ async function seedDatabaseIfEmpty() {
   // 1. Roles
   const roles = [
     { name: "DRIVER", description: "Standard EV Driver", isSystemRole: true },
+    { name: "INFRASTRUCTURE_OPERATOR", description: "Unified charging and parking infrastructure operator", isSystemRole: true },
     { name: "OPERATOR", description: "Charging Station Operator", isSystemRole: true },
     { name: "PARKING_OPERATOR", description: "Parking Infrastructure Operator", isSystemRole: true },
     { name: "ADMIN", description: "Platform Administrator", isSystemRole: true },
@@ -75,6 +76,14 @@ async function seedDatabaseIfEmpty() {
   }
 
   // 3. Role-Permission mappings
+  const infrastructurePermissions = [
+    "user:read",
+    "station:read", "station:create", "station:update", "station:delete", "station:manage",
+    "charger:read", "charger:create", "charger:update", "charger:manage",
+    "parking:read", "parking:create", "parking:update", "parking:manage",
+    "reservation:read", "session:read", "session:manage", "payment:read",
+    "iot:read", "iot:unlock", "iot:lock", "iot:manage", "analytics:read", "device:manage",
+  ];
   const rolePermissionMap: Record<string, string[]> = {
     DRIVER: [
       "user:read",
@@ -84,18 +93,9 @@ async function seedDatabaseIfEmpty() {
       "reservation:create", "reservation:read", "reservation:cancel",
       "parking:read", "payment:read", "payment:create", "session:read", "iot:unlock", "analytics:read"
     ],
-    OPERATOR: [
-      "user:read",
-      "station:read", "station:create", "station:update", "station:manage",
-      "charger:read", "charger:create", "charger:update", "charger:manage",
-      "reservation:read", "session:read", "analytics:read"
-    ],
-    PARKING_OPERATOR: [
-      "user:read",
-      "parking:read", "parking:create", "parking:update", "parking:manage",
-      "reservation:read", "session:read",
-      "iot:read", "iot:unlock", "iot:lock", "iot:manage", "analytics:read"
-    ],
+    INFRASTRUCTURE_OPERATOR: infrastructurePermissions,
+    OPERATOR: infrastructurePermissions,
+    PARKING_OPERATOR: infrastructurePermissions,
     ADMIN: permissionsData.map(p => `${p.resource}:${p.action}`)
   };
 
