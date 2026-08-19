@@ -1,11 +1,23 @@
-# Backup Charger Selection
+---
 
-**Documentation area:** 04-intelligence
+### 3. `ENERGY_MODEL.md`
 
-Energy estimation, EV routing, traffic intelligence, station ranking, charger reliability, backup selection, and optimization.
+```md
+# ⚡ Energy Model
 
-## Purpose
-Define the canonical project guidance for this topic.
+**Module:** EV Intelligence  
+**Status:** MVP
 
-## Status
-Scaffold / team-owned document.
+---
+
+## 1. Purpose
+
+The Energy Model estimates the energy required for a journey.
+
+---
+
+## 2. Base Model
+
+```text
+energyKWh =
+distanceKm × efficiencyWhPerKm / 1000
