@@ -23,8 +23,4 @@ routingRouter.post("/evaluate-predicted", async (request, response, next) => {
   } catch (error) {
     next(error);
   }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)

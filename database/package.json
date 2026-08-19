@@ -4,14 +4,11 @@
   "private": true,
   "description": "Prisma schema, migrations, seeds, and database operations for EV Mobility Platform",
   "scripts": {
-<<<<<<< HEAD
-=======
     "dev": "echo dev",
     "build": "echo build",
     "test": "echo test",
     "lint": "echo lint",
     "typecheck": "echo typecheck",
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)
     "verify": "tsx scripts/verify.ts"
   },
   "dependencies": {

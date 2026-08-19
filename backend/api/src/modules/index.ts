@@ -52,8 +52,4 @@ apiRouter.use("/bookings", bookingRouter);
 apiRouter.use("/recommendations", recommendationRouter);
 apiRouter.use("/reliability", reliabilityRouter);
 apiRouter.use("/telemetry", telemetryRouter);
-<<<<<<< HEAD
 apiRouter.use("/admin/demo", demoControlRouter);
-=======
-
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)

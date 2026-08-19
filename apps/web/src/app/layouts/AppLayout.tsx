@@ -9,15 +9,7 @@ export function AppLayout({ children }: PropsWithChildren) {
           <NavLink to="/" className="text-lg font-semibold tracking-tight text-volt-400">
             VoltTwin AI
           </NavLink>
-          <nav aria-label="Primary navigation" className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300">
-            <NavLink to="/">Journey</NavLink>
-            <NavLink to="/journey/live">Live journey</NavLink>
-            <NavLink to="/operator">Operator</NavLink>
-            <NavLink to="/operator/traffic">Traffic twin</NavLink>
-            <NavLink to="/operator/chargers">Chargers</NavLink>
-            <NavLink to="/operator/analytics">Analytics</NavLink>
-            <NavLink to="/admin">Demo</NavLink>
-          </nav>
+          <nav aria-label="Primary navigation" className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-300" />
         </div>
       </header>
       <main className="mx-auto max-w-7xl px-6 py-10">{children}</main>
