@@ -1,23 +1,61 @@
-# Entity Relationship Diagram
 
-```mermaid
-erDiagram
-    USER ||--o{ VEHICLE : owns
-    USER ||--o{ JOURNEY : creates
-    VEHICLE ||--o{ JOURNEY : used_for
-    STATION ||--o{ CHARGER : contains
-    STATION ||--o{ STATION_STATUS : reports
-    USER ||--o{ RESERVATION : makes
-    VEHICLE ||--o{ RESERVATION : uses
-    STATION ||--o{ RESERVATION : receives
-    CHARGER ||--o{ RESERVATION : targets
-    STATION ||--o{ PARKING_SPACE : contains
-    USER ||--o{ PARKING_RESERVATION : makes
-    VEHICLE ||--o{ PARKING_RESERVATION : uses
-    PARKING_SPACE ||--o{ PARKING_RESERVATION : reserved_for
-    RESERVATION ||--o{ PAYMENT : produces
-    PARKING_RESERVATION ||--o{ PAYMENT : produces
-    PARKING_SPACE ||--o{ OCCUPANCY_EVENT : emits
-    IOT_DEVICE ||--o{ OCCUPANCY_EVENT : reports
-    USER ||--o{ NOTIFICATION : receives
-```
+### `05-database/er_diagram.md`
+
+```md
+# EV Mobility Platform — ER Diagram
+
+**Module:** `05-database`  
+**File:** `er_diagram.md`  
+**Version:** `1.0`  
+**Status:** Database Relationship Baseline
+
+---
+
+## 1. Purpose
+
+This document describes the conceptual relationships between the primary EV Mobility Platform database entities.
+
+The diagram represents the proposed database baseline and should be synchronized with the final database migrations.
+
+---
+
+## 2. High-Level ER Structure
+
+```text
+                              ┌──────────────┐
+                              │    USERS     │
+                              └──────┬───────┘
+                                     │
+              ┌──────────────────────┼──────────────────────┐
+              │                      │                      │
+              ▼                      ▼                      ▼
+        ┌───────────┐         ┌────────────┐        ┌─────────────┐
+        │  VEHICLES │         │ USER_ROLES │        │  JOURNEYS   │
+        └─────┬─────┘         └──────┬─────┘        └──────┬──────┘
+              │                      │                     │
+              │                      ▼                     ▼
+              │                 ┌──────────┐          ┌─────────┐
+              │                 │  ROLES   │          │ ROUTES  │
+              │                 └──────────┘          └─────────┘
+              │
+              ├──────────────────────────────┐
+              │                              │
+              ▼                              ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │ CHARGING_RESERVATION│          │ PARKING_RESERVATION │
+   └──────────┬──────────┘          └──────────┬──────────┘
+              │                                │
+              ▼                                ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │ CHARGING_SESSIONS   │          │   PARKING_SLOTS     │
+   └──────────┬──────────┘          └──────────┬──────────┘
+              │                                │
+              ▼                                ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │      CHARGERS       │          │ PARKING_LOCATIONS   │
+   └──────────┬──────────┘          └─────────────────────┘
+              │
+              ▼
+   ┌─────────────────────┐
+   │ CHARGING_STATIONS   │
+   └─────────────────────┘
