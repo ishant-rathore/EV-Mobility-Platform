@@ -1,23 +1,63 @@
----
+# ⚡ EV Mobility Platform — Backup Charger
 
-### 3. `ENERGY_MODEL.md`
-
-```md
-# ⚡ Energy Model
-
-**Module:** EV Intelligence  
-**Status:** MVP
+**Project:** EV Mobility Platform  
+**Module:** Intelligence  
+**Document:** Backup Charger Strategy  
+**Version:** 1.0  
+**Status:** SIH 2026 MVP  
+**Priority:** P0 / MVP
 
 ---
 
 ## 1. Purpose
 
-The Energy Model estimates the energy required for a journey.
+The Backup Charger module provides a fallback charging station when the primary recommended charging station becomes unavailable or unsuitable.
+
+The backup charger must maintain:
+
+- Battery feasibility
+- Charger compatibility
+- Route feasibility
+- Acceptable detour
+- Station availability
+- Charging reliability
 
 ---
 
-## 2. Base Model
+## 2. Problem
+
+A recommended charging station may become unavailable because of:
+
+- Charger becoming occupied
+- Charger fault
+- Station offline
+- Reservation failure
+- Excessive waiting time
+- Unexpected route or traffic changes
+
+The system must therefore maintain a viable alternative.
+
+---
+
+## 3. Backup Charger Flow
 
 ```text
-energyKWh =
-distanceKm × efficiencyWhPerKm / 1000
+Primary Charging Station
+          ↓
+Availability Check
+          ↓
+     Available?
+       /     \
+     YES      NO
+      ↓        ↓
+ Continue   Find Backup
+              ↓
+       Battery Feasibility
+              ↓
+       Charger Compatibility
+              ↓
+        Route Evaluation
+              ↓
+        Station Ranking
+              ↓
+       Backup Recommendation
