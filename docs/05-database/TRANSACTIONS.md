@@ -1,11 +1,23 @@
-# Transactions
 
-**Documentation area:** 05-database
+### `05-transactions.md`
 
-Canonical PostgreSQL data model, ERD, schema, relationships, indexes, migrations, seed data, retention, and transactions.
+```md
+# EV Mobility Platform — Database Transactions
 
-## Purpose
-Define the canonical project guidance for this topic.
+**Module:** `05-database`  
+**File:** `transactions.md`  
+**Version:** `1.0`  
+**Status:** Database Transaction Baseline
 
-## Status
-Scaffold / team-owned document.
+---
+
+## 1. Purpose
+
+Database transactions protect operations that modify multiple related records.
+
+A transaction should ensure that related changes either:
+
+```text
+ALL SUCCEED
+    OR
+ALL ROLL BACK
