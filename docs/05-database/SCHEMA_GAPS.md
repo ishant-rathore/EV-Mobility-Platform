@@ -1,13 +1,31 @@
-# Schema Gaps
 
-No Prisma semantics were changed during repository normalization. The current schema already covers users, EV vehicles, journeys, routes/segments, traffic snapshots, stations/chargers, telemetry, reliability snapshots, recommendations, bookings, parking, payments, charging sessions, notifications, devices, occupancy events, reviews, and audit logs.
+### `05-database/schema_gaps.md`
 
-Known naming/coverage decisions to review before a future migration:
+```md
+# EV Mobility Platform — Schema Gaps
 
-- `Booking` currently represents the reservation concept; renaming it would be an API/data migration, not structural cleanup.
-- `ParkingSlot`/`ParkingBooking` map to the target parking-space/reservation concepts.
-- Operator ownership is not yet represented as a dedicated `Operator` model.
-- Charger status uses `AVAILABLE`, `OCCUPIED`, `OFFLINE`, and `FAULTED`; the IoT protocol also distinguishes `CONNECTED`, `CHARGING`, and `FAULT`. Aligning these requires a documented state-transition migration.
-- `Recommendation` is broader than the proposed `ChargingRecommendation` name.
+**Module:** `05-database`  
+**File:** `schema_gaps.md`  
+**Version:** `1.0`  
+**Status:** Open Database Design Questions
 
-Any accepted change requires a Prisma migration, updated seed data, API compatibility review, and tests.
+---
+
+## 1. Purpose
+
+This document records database areas that require validation or further specification before being treated as finalized production schema.
+
+---
+
+## 2. Authentication Ownership
+
+The project uses an authentication system, but the exact boundary between authentication-provider data and application-owned user data must remain explicit.
+
+```text
+AUTH PROVIDER
+     │
+     ▼
+IDENTITY
+     │
+     ▼
+APPLICATION USERS
