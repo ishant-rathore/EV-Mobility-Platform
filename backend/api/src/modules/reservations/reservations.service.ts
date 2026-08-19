@@ -21,6 +21,7 @@ export class ReservationService {
         take: limit,
         include: {
           parkingSlot: { include: { location: true, device: true } },
+          charger: { include: { station: true } },
           payment: true,
           user: { select: { id: true, name: true, email: true } },
         },
@@ -36,6 +37,7 @@ export class ReservationService {
       where: { id },
       include: {
         parkingSlot: { include: { location: true, device: true } },
+        charger: { include: { station: true } },
         payment: true,
         user: { select: { id: true, name: true, email: true } },
       },
@@ -46,12 +48,19 @@ export class ReservationService {
     return booking;
   }
 
-  static async create(userId: string, data: { parkingSlotId: string; startsAt: string; endsAt: string }) {
+  static async create(userId: string, data: { parkingSlotId: string; chargerId?: string; startsAt: string; endsAt: string }) {
     const slot = await prisma.parkingSlot.findUnique({
       where: { id: data.parkingSlotId },
     });
     if (!slot) {
       throw new AppError("Parking slot not found.", 404, "SLOT_NOT_FOUND");
+    }
+
+    if (data.chargerId) {
+      const charger = await prisma.charger.findUnique({ where: { id: data.chargerId } });
+      if (!charger) {
+        throw new AppError("Charger not found.", 404, "CHARGER_NOT_FOUND");
+      }
     }
 
     const start = new Date(data.startsAt);
@@ -79,11 +88,12 @@ export class ReservationService {
       data: {
         userId,
         parkingSlotId: data.parkingSlotId,
+        chargerId: data.chargerId,
         startsAt: start,
         endsAt: end,
         status: "CONFIRMED",
       },
-      include: { parkingSlot: { include: { location: true } } },
+      include: { parkingSlot: { include: { location: true } }, charger: { include: { station: true } } },
     });
   }
 

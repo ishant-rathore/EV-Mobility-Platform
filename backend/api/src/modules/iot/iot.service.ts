@@ -23,6 +23,60 @@ export class IoTDeviceService {
     return { devices, meta: { page, limit, total } };
   }
 
+  /**
+   * Single-device lookup for the driver's parking-access screen. Deliberately
+   * not gated by `iot:read` (DRIVER never gets that blanket permission) —
+   * access is scoped to devices tied to the caller's own CONFIRMED/ACTIVE
+   * booking, mirroring the eligibility window enforced in sendCommand.
+   */
+  static async getById(deviceId: string, userId: string, roleName: string) {
+    const device = await prisma.ioTDevice.findUnique({
+      where: { id: deviceId },
+      include: { parkingSlot: { include: { location: true } } },
+    });
+    if (!device) {
+      throw new AppError("IoT Device not found.", 404, "DEVICE_NOT_FOUND");
+    }
+
+    if (roleName === "ADMIN") {
+      return { ...device, currentBooking: null };
+    }
+    if (isInfrastructureOperatorRole(roleName)) {
+      if (device.parkingSlot?.location?.operatorId === userId) {
+        return { ...device, currentBooking: null };
+      }
+      throw new AppError("You do not manage this device.", 403, "FORBIDDEN");
+    }
+
+    if (device.parkingSlotId) {
+      const booking = await prisma.booking.findFirst({
+        where: {
+          userId,
+          parkingSlotId: device.parkingSlotId,
+          status: { in: ["CONFIRMED", "ACTIVE"] },
+        },
+        orderBy: { startsAt: "desc" },
+      });
+      if (booking) {
+        const now = Date.now();
+        const accessStart = new Date(booking.startsAt).getTime() - 15 * 60 * 1000;
+        const accessEnd = new Date(booking.endsAt).getTime();
+        return {
+          ...device,
+          currentBooking: {
+            id: booking.id,
+            status: booking.status,
+            startsAt: booking.startsAt,
+            endsAt: booking.endsAt,
+            unlockEligible: now >= accessStart && now <= accessEnd,
+          },
+        };
+      }
+    }
+
+    throw new AppError("You do not have an active reservation for this device.", 403, "FORBIDDEN");
+  }
+
   static async sendCommand(deviceId: string, command: "UNLOCK" | "LOCK", userId: string, roleName: string, reservationId?: string) {
     const device = await prisma.ioTDevice.findUnique({
       where: { id: deviceId },

@@ -1,6 +1,7 @@
 import type { Response, NextFunction } from "express";
 import { JourneysService } from "./journeys.service.js";
 import { planJourneySchema } from "./journeys.schemas.js";
+import { integratedJourneyEvaluationSchema } from "../journey/journey.schemas.js";
 import { sendSuccess } from "../../shared/response.js";
 import type { AuthRequest } from "../../middleware/auth.middleware.js";
 
@@ -40,6 +41,16 @@ export class JourneysController {
     try {
       const journey = await JourneysService.cancel(req.params.id as string);
       return sendSuccess(res, journey);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async evaluate(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const input = integratedJourneyEvaluationSchema.parse(req.body);
+      const result = await JourneysService.evaluate(req.user!.id, input);
+      return sendSuccess(res, result, 201);
     } catch (error) {
       next(error);
     }

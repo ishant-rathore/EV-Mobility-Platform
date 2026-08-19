@@ -58,6 +58,8 @@ export async function seedRbac(prisma: PrismaClient) {
     { resource: "iot", action: "lock" },
     { resource: "iot", action: "manage" },
     { resource: "session", action: "read" },
+    { resource: "session", action: "create" },
+    { resource: "session", action: "update" },
     { resource: "session", action: "manage" },
     { resource: "analytics", action: "read" },
     { resource: "device", action: "manage" },
@@ -89,7 +91,7 @@ export async function seedRbac(prisma: PrismaClient) {
       "journey:create", "journey:read", "journey:cancel",
       "station:read", "charger:read",
       "reservation:create", "reservation:read", "reservation:cancel",
-      "parking:read", "payment:read", "payment:create", "session:read", "iot:unlock"
+      "parking:read", "payment:read", "payment:create", "session:read", "session:create", "session:update", "iot:unlock"
     ],
     INFRASTRUCTURE_OPERATOR: infrastructurePermissions,
     // Legacy roles intentionally retain compatibility during the account migration.
@@ -124,13 +126,14 @@ export async function seedRbac(prisma: PrismaClient) {
     const roleId = roleRecords[du.role].id;
     await prisma.user.upsert({
       where: { email: du.email },
-      update: { roleId },
+      update: { roleId, emailVerifiedAt: new Date() },
       create: {
         email: du.email,
         name: du.name,
         roleId: roleId,
         passwordHash: "$2b$10$dummyhashedpasswordfordemoonly", // Not for prod
-        isActive: true
+        isActive: true,
+        emailVerifiedAt: new Date(), // Demo accounts skip email verification.
       }
     });
   }

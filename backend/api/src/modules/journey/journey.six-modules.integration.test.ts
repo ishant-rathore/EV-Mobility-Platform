@@ -18,7 +18,7 @@ describe("authoritative six-module journey path", () => {
   beforeEach(() => resetReliabilityStore());
 
   it("uses the stored EV connector and selected route to choose primary and backup chargers", async () => {
-    const response = await request(app).post("/api/v1/journeys/evaluate").send(journeyRequest);
+    const response = await request(app).post("/api/v1/journey-eval/evaluate").send(journeyRequest);
 
     expect(response.status).toBe(200);
     expect(response.body.integration.modules).toEqual([
@@ -61,7 +61,7 @@ describe("authoritative six-module journey path", () => {
   });
 
   it("routes simulator fault telemetry through Module 6 and promotes the backup", async () => {
-    const initial = await request(app).post("/api/v1/journeys/evaluate").send(journeyRequest);
+    const initial = await request(app).post("/api/v1/journey-eval/evaluate").send(journeyRequest);
     const originalPrimaryId = initial.body.chargingIntelligence.primary.chargerId as string;
     const originalBackupId = initial.body.chargingIntelligence.backup.chargerId as string;
 
@@ -75,7 +75,7 @@ describe("authoritative six-module journey path", () => {
       isSimulated: true,
     });
     const reevaluated = await request(app)
-      .post("/api/v1/journeys/evaluate")
+      .post("/api/v1/journey-eval/evaluate")
       .send({ ...journeyRequest, diversificationSimulationId: "six-module-fault" });
 
     expect(telemetry.status).toBe(202);

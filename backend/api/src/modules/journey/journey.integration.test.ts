@@ -17,7 +17,7 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
   it("uses the stored EV energy budget and predicted traffic for every candidate route", async () => {
     const vehicleResponse = await request(app).get("/api/v1/ev/vehicles/vehicle-nexon-demo");
     const journeyResponse = await request(app)
-      .post("/api/v1/journeys/evaluate")
+      .post("/api/v1/journey-eval/evaluate")
       .send(journeyRequest);
 
     expect(vehicleResponse.status).toBe(200);
@@ -81,14 +81,14 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
   it("changes ETA and energy factors when the traffic horizon changes", async () => {
     const [currentResponse, predictedResponse] = await Promise.all([
       request(app)
-        .post("/api/v1/journeys/evaluate")
+        .post("/api/v1/journey-eval/evaluate")
         .send({
           ...journeyRequest,
           trafficHorizon: "CURRENT",
           diversificationSimulationId: "journey-current",
         }),
       request(app)
-        .post("/api/v1/journeys/evaluate")
+        .post("/api/v1/journey-eval/evaluate")
         .send({ ...journeyRequest, diversificationSimulationId: "journey-predicted" }),
     ]);
 
@@ -104,7 +104,7 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
 
   it("uses the Module 1 vehicle class to exclude illegal Module 3 corridors", async () => {
     const response = await request(app)
-      .post("/api/v1/journeys/evaluate")
+      .post("/api/v1/journey-eval/evaluate")
       .send({
         ...journeyRequest,
         vehicleId: "vehicle-etruck-demo",
@@ -127,7 +127,7 @@ describe("Module 1 → Module 2 → Module 3 → Module 4 → Module 5 → Modul
 
   it("rejects a missing Module 1 vehicle instead of trusting client vehicle data", async () => {
     const response = await request(app)
-      .post("/api/v1/journeys/evaluate")
+      .post("/api/v1/journey-eval/evaluate")
       .send({ ...journeyRequest, vehicleId: "missing-vehicle" });
 
     expect(response.status).toBe(404);

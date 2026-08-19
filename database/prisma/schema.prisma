@@ -39,15 +39,20 @@ enum BookingState {
 }
 
 model User {
-  id               String            @id @default(cuid())
-  email            String            @unique
-  name             String
-  phone            String?
-  passwordHash     String?
-  roleId           String?
-  isActive         Boolean           @default(true)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
+  id                          String            @id @default(cuid())
+  email                       String            @unique
+  name                        String
+  phone                       String?
+  passwordHash                String?
+  roleId                      String?
+  isActive                    Boolean           @default(true)
+  emailVerifiedAt             DateTime?
+  emailVerificationTokenHash  String?
+  emailVerificationExpiresAt  DateTime?
+  passwordResetTokenHash      String?
+  passwordResetExpiresAt      DateTime?
+  createdAt                   DateTime          @default(now())
+  updatedAt                   DateTime          @updatedAt
   role             Role?             @relation(fields: [roleId], references: [id])
   vehicles         EVVehicle[]
   journeys         Journey[]
@@ -205,6 +210,7 @@ model Charger {
   telemetry            ChargerTelemetry[]
   reliabilitySnapshots ReliabilitySnapshot[]
   chargingSessions     ChargingSession[]
+  bookings             Booking[]
 }
 
 model ChargerTelemetry {
@@ -285,11 +291,13 @@ model Booking {
   id            String       @id @default(cuid())
   userId        String
   parkingSlotId String
+  chargerId     String?
   startsAt      DateTime
   endsAt        DateTime
   status        BookingState @default(PENDING)
   user          User         @relation(fields: [userId], references: [id])
   parkingSlot   ParkingSlot  @relation(fields: [parkingSlotId], references: [id])
+  charger       Charger?     @relation(fields: [chargerId], references: [id])
   payment       Payment?
 }
 

@@ -16,6 +16,15 @@ export class IoTController {
     }
   }
 
+  static async getById(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const device = await IoTDeviceService.getById(req.params.id as string, req.user!.id, req.user!.roleName || "DRIVER");
+      return sendSuccess(res, device);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   static async unlock(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const input = deviceCommandSchema.parse(req.body);

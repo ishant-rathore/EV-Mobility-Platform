@@ -36,7 +36,7 @@ export class VehicleNotFoundError extends Error {
   }
 }
 
-function toRecord(row: EVVehicle): EvVehicleRecord {
+export function toRecord(row: EVVehicle): EvVehicleRecord {
   return {
     id: row.id,
     name: row.name,

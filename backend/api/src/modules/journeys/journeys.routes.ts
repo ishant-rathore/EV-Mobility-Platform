@@ -7,5 +7,6 @@ export const journeysRouter = Router();
 
 journeysRouter.get("/", authenticate, authorize("journey:read"), JourneysController.list);
 journeysRouter.post("/plan", authenticate, authorize("journey:create"), JourneysController.plan);
+journeysRouter.post("/evaluate", authenticate, authorize("journey:create"), JourneysController.evaluate);
 journeysRouter.get("/:id", authenticate, authorize("journey:read"), checkOwnership("journey"), JourneysController.getById);
 journeysRouter.post("/:id/cancel", authenticate, authorize("journey:cancel"), checkOwnership("journey"), JourneysController.cancel);
