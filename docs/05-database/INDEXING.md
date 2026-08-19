@@ -1,11 +1,61 @@
-# Indexing
 
-**Documentation area:** 05-database
+### `05-er_diagram.md`
 
-Canonical PostgreSQL data model, ERD, schema, relationships, indexes, migrations, seed data, retention, and transactions.
+```md
+# EV Mobility Platform — ER Diagram
 
-## Purpose
-Define the canonical project guidance for this topic.
+**Module:** `05-database`  
+**File:** `er_diagram.md`  
+**Version:** `1.0`  
+**Status:** Database Relationship Baseline
 
-## Status
-Scaffold / team-owned document.
+---
+
+## 1. Purpose
+
+This document describes the conceptual relationships between the primary EV Mobility Platform database entities.
+
+The diagram represents the proposed database baseline and should be synchronized with the final database migrations.
+
+---
+
+## 2. High-Level ER Structure
+
+```text
+                              ┌──────────────┐
+                              │    USERS     │
+                              └──────┬───────┘
+                                     │
+              ┌──────────────────────┼──────────────────────┐
+              │                      │                      │
+              ▼                      ▼                      ▼
+        ┌───────────┐         ┌────────────┐        ┌─────────────┐
+        │  VEHICLES │         │ USER_ROLES │        │  JOURNEYS   │
+        └─────┬─────┘         └──────┬─────┘        └──────┬──────┘
+              │                      │                     │
+              │                      ▼                     ▼
+              │                 ┌──────────┐          ┌─────────┐
+              │                 │  ROLES   │          │ ROUTES  │
+              │                 └──────────┘          └─────────┘
+              │
+              ├──────────────────────────────┐
+              │                              │
+              ▼                              ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │ CHARGING_RESERVATION│          │ PARKING_RESERVATION │
+   └──────────┬──────────┘          └──────────┬──────────┘
+              │                                │
+              ▼                                ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │ CHARGING_SESSIONS   │          │   PARKING_SLOTS     │
+   └──────────┬──────────┘          └──────────┬──────────┘
+              │                                │
+              ▼                                ▼
+   ┌─────────────────────┐          ┌─────────────────────┐
+   │      CHARGERS       │          │ PARKING_LOCATIONS   │
+   └──────────┬──────────┘          └─────────────────────┘
+              │
+              ▼
+   ┌─────────────────────┐
+   │ CHARGING_STATIONS   │
+   └─────────────────────┘
