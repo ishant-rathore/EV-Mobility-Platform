@@ -1,15 +1,53 @@
-# Charger recommendation flow
+# ⚡ EV Mobility Platform — Charger Recommendation Flow
+
+**Module:** 07-workflows  
+**Flow:** Charger Recommendation  
+**Version:** 1.0  
+**Status:** Frozen MVP Workflow
+
+---
+
+## 1. Purpose
+
+This workflow determines the most suitable charging station for an EV journey.
+
+The recommendation must consider:
+
+- Current battery SOC
+- Vehicle battery capacity
+- Vehicle efficiency
+- Route distance
+- Energy requirement
+- Charger availability
+- Charging power
+- Charging price
+- Estimated waiting time
+- Station detour
+- Station distance
+
+---
+
+## 2. Flow
 
 ```text
-Stored EV profile and SOC
-→ route energy feasibility
-→ predicted/current traffic
-→ diversified eligible route
-→ route-linked charger candidates
-→ reachability and connector hard filters
-→ reliability-aware station ranking
-→ primary and backup charger
-→ Module 8 recommendation and explanation
-```
-
-Module 8 only composes verified upstream results. It does not bypass Module 1 by trusting client battery data and does not replace Module 5/6 eligibility or reliability decisions.
+Journey
+   ↓
+Current SOC
+   ↓
+Estimate Energy Required
+   ↓
+Charging Required?
+   │
+   ├── NO → Continue Journey
+   │
+   └── YES
+        ↓
+Discover Stations
+        ↓
+Filter Available Chargers
+        ↓
+Calculate Station Score
+        ↓
+Rank Stations
+        ↓
+Recommend Best Station
