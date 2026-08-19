@@ -1,25 +1,27 @@
+# EV Mobility Platform — Scope Summary
+
+**Version:** 1.0  
+**Status:** Frozen SIH 2026 MVP
 
 ---
 
-## 9. `SCOPE_SUMMARY.md`
-
-```md
-# EV Mobility Platform — Scope Summary
-
-## In Scope — P0
+## 1. In Scope — P0
 
 ### EV
+
 - User profile
 - EV profile
-- Battery/SOC
+- Battery / SOC
 
 ### Mobility
+
 - Origin
 - Destination
 - Route
 - Energy estimation
 
 ### Charging
+
 - Station discovery
 - Availability
 - Cost
@@ -28,12 +30,14 @@
 - Charging recommendation
 
 ### Booking
+
 - Charging reservation
 - Parking reservation
 - Payment
 - Booking confirmation
 
 ### IoT
+
 - ESP32
 - MQTT
 - Occupancy sensor
@@ -41,6 +45,7 @@
 - Access control
 
 ### Analytics
+
 - Reservations
 - Charging sessions
 - Parking occupancy
@@ -48,7 +53,9 @@
 
 ---
 
-# Out of Scope
+# 2. Out of Scope
+
+The following features are not part of the frozen SIH 2026 MVP:
 
 - ANPR
 - CCTV
@@ -64,8 +71,15 @@
 
 ---
 
-# MVP Success
+# 3. MVP Journey
 
-The MVP succeeds when the complete journey works:
+The MVP focuses on completing the core EV mobility journey:
 
-> **Plan → Charge → Park → Go**
+```text
+PLAN
+  ↓
+CHARGE
+  ↓
+PARK
+  ↓
+GO
