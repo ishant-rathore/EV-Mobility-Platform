@@ -1,11 +1,25 @@
-# Migrations
 
-**Documentation area:** 05-database
+### `05-migration.md`
 
-Canonical PostgreSQL data model, ERD, schema, relationships, indexes, migrations, seed data, retention, and transactions.
+```md
+# EV Mobility Platform — Database Migration
 
-## Purpose
-Define the canonical project guidance for this topic.
+**Module:** `05-database`  
+**File:** `migration.md`  
+**Version:** `1.0`  
+**Status:** Database Migration Baseline
 
-## Status
-Scaffold / team-owned document.
+---
+
+## 1. Purpose
+
+Database migrations provide a version-controlled method for creating and changing the PostgreSQL database schema.
+
+```text
+SCHEMA CHANGE
+     ↓
+MIGRATION FILE
+     ↓
+VERSION CONTROL
+     ↓
+DATABASE
