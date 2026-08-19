@@ -1,35 +1,39 @@
-# ⚡ EV Mobility Platform — Station Ranking
+# ⚡ EV Mobility Platform — Traffic Diversification
 
 **Module:** `04-intelligence`  
-**File:** `STATION_RANKING.md`  
+**File:** `TRAFFIC_DIVERSIFICATION.md`  
 **Version:** `1.0`  
-**Status:** Frozen SIH 2026 MVP Intelligence Baseline
+**Status:** Future Intelligence / Extension
 
 ---
 
 ## 1. Purpose
 
-The Station Ranking module ranks suitable charging stations for an EV journey.
+The Traffic Diversification module evaluates alternative routes when traffic conditions make the primary route less suitable.
 
-The objective is to identify charging stations that provide the best overall option based on journey-relevant factors rather than distance alone.
+Its purpose is to prevent the platform from relying on a single route when alternative routes may provide a better overall EV journey.
 
 ---
 
-## 2. Ranking Flow
+## 2. Traffic Diversification Flow
 
 ```text
-CHARGING REQUIRED
-        ↓
-FIND CANDIDATE STATIONS
-        ↓
-CHECK AVAILABILITY
-        ↓
-CHECK CHARGER COMPATIBILITY
-        ↓
-CHECK REACHABILITY
-        ↓
-EVALUATE STATIONS
-        ↓
-RANK STATIONS
-        ↓
-RECOMMEND BEST OPTION
+ORIGIN
+   +
+DESTINATION
+   ↓
+ROUTE OPTIONS
+   ↓
+TRAFFIC CONDITIONS
+   ↓
+ROUTE TRAVEL-TIME EVALUATION
+   ↓
+ENERGY IMPACT
+   ↓
+CHARGING IMPACT
+   ↓
+ALTERNATIVE ROUTES
+   ↓
+ROUTE SCORING
+   ↓
+RECOMMENDATION
