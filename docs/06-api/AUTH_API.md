@@ -1,11 +1,21 @@
-# Auth Api
 
-**Documentation area:** 06-api
+### `06-auth_api.md`
 
-REST/WebSocket API contracts for every major platform module.
+```md
+# EV Mobility Platform — Authentication API
 
-## Purpose
-Define the canonical project guidance for this topic.
+**Module:** `06-api`  
+**File:** `auth_api.md`  
+**Version:** `1.0`  
+**Status:** Authentication API Baseline
 
-## Status
-Scaffold / team-owned document.
+---
+
+## 1. Purpose
+
+The Authentication API defines the application-facing authentication boundary.
+
+Authentication establishes:
+
+```text
+WHO IS THE USER?
