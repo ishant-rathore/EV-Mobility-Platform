@@ -1,5 +1,5 @@
 
-### `06-api/api_overview.md`
+### `06-api_overview.md`
 
 ```md
 # EV Mobility Platform — API Overview
