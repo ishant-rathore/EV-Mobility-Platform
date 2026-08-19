@@ -1,17 +1,13 @@
-<<<<<<< HEAD
-
----
-
-## 8. `README.md`
-
-```md
 # ⚡ EV Mobility Platform — Requirements
 
-This directory contains the official requirements baseline for the EV Mobility Platform.
+**Version:** 1.0  
+**Status:** Frozen SIH 2026 MVP
 
 ---
 
-## Purpose
+## 1. Purpose
+
+This directory contains the official requirements baseline for the EV Mobility Platform.
 
 The requirements documents define:
 
@@ -26,7 +22,7 @@ The requirements documents define:
 
 ---
 
-## Requirements Structure
+## 2. Requirements Structure
 
 ```text
 01-requirements/
@@ -44,8 +40,3 @@ The requirements documents define:
 ├── USER_ROLES.md
 ├── USER_ROLES_SUMMARY.md
 └── USER_STORIES.md
-=======
-# Requirements
-
-Functional, non-functional, acceptance, and traceability documents belong here.
->>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)
