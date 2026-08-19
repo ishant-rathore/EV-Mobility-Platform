@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
+=======
+// TODO: add canonical project models.
+// Core entities: User, Vehicle, Journey, Station, Charger, StationStatus,
+// Reservation, ParkingSpace, ParkingReservation, Payment, IoTDevice,
+// OccupancyEvent, Notification.
+>>>>>>> 9910318 (feat: update EV mobility platform RBAC and backend foundation)
 enum ChargerState {
   AVAILABLE
   OCCUPIED

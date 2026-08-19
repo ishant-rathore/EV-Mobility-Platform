@@ -1,30 +1,27 @@
-# Analytics API
+# Charging intelligence API
 
-**Module:** `06-api`  
-**File:** `ANALYTICS_API.md`  
-**Version:** `1.0`
+## Recommend compatible chargers
 
----
+`POST /api/v1/chargers/recommendations`
 
-## 1. Purpose
+Example request:
 
-The Analytics API provides authorized users with aggregated EV mobility
-operational and usage metrics.
+```json
+{
+  "stationIds": ["station-demo-1", "station-demo-2"],
+  "connectorTypes": ["CCS2"],
+  "minimumPowerKw": 20,
+  "origin": { "latitude": 18.969, "longitude": 72.8194 },
+  "maximumReachKm": 80
+}
+```
 
-Supported analytics domains include:
+The response contains ranked eligible `candidates`, `excludedCandidates` with exclusion reasons, and reliability-enriched `primary` and `backup` selections. Demo results are explicitly marked `sourceMode: "DEMO"` and `isSimulated: true`.
 
-- Charging
-- Energy
-- Reservations
-- Parking
-- Revenue
-- Station utilization
+Hard filters run before scoring: connector compatibility, minimum power, estimated reachability, port availability, operational state, and Module 6 usability. Detour, range, availability, and wait values remain estimates rather than guarantees.
 
-Analytics must respect RBAC and resource ownership.
+## Integrated journey
 
----
+`POST /api/v1/journeys/evaluate` is the authoritative Modules 1–6 endpoint. Its `chargingIntelligence` object applies Module 5 and Module 6 to the route selected by Module 4. If charging is not estimated to be required, `primary` and `backup` are `null`.
 
-## 2. Base Path
-
-```text
-/api/v1/analytics
+Telemetry posted through `POST /api/v1/telemetry` or ingested through MQTT updates Module 6. A later journey evaluation will exclude a newly faulted/offline charger and may promote the prior backup.
