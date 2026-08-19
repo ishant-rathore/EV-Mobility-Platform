@@ -1,3 +1,5 @@
+
+
 # ⚡ EV Mobility Platform
 
 > **Plan. Charge. Park. Go.**
@@ -66,7 +68,7 @@ ANALYTICS
 
 🎯 Problem
 
-EV drivers often manage battery, charging, parking, reservations and payments across fragmented systems.
+EV drivers often manage battery, charging, parking, reservations, and payments across fragmented systems.
 
 This creates:
 
@@ -87,7 +89,7 @@ Manual physical access
 
 Core Problem
 
-> EV drivers lack a unified system that connects battery-aware journey planning, charging, parking, payment and physical infrastructure into one journey.
+> EV drivers lack a unified system that connects battery-aware journey planning, charging, parking, payment, and physical infrastructure into one journey.
 
 
 
@@ -136,9 +138,6 @@ Connector type
 EV preferences
 
 
-
----
-
 🗺️ Journey Planning
 
 Origin and destination
@@ -153,9 +152,6 @@ EV-aware route planning
 
 Charging requirement detection
 
-
-
----
 
 🔋 Energy Intelligence
 
@@ -176,9 +172,6 @@ Energy Required
 Expected Arrival SOC
      ↓
 Charging Required?
-
-
----
 
 ⚡ Charging Intelligence
 
@@ -203,9 +196,6 @@ Parking availability
 
 Recommendations are designed to be explainable.
 
-
----
-
 📅 Charging Reservation
 
 Drivers can:
@@ -222,9 +212,6 @@ View reservation status
 
 Cancel reservations
 
-
-
----
 
 🅿️ Smart Parking
 
@@ -243,9 +230,6 @@ Monitor parking sessions
 Access authorized parking infrastructure
 
 
-
----
-
 💳 Digital Payment
 
 The platform supports payment as part of the reservation workflow.
@@ -257,9 +241,6 @@ Payment
 Server-side Verification
     ↓
 Confirmation
-
-
----
 
 📡 IoT Smart Parking
 
@@ -287,9 +268,6 @@ Publish device status
 Communicate through MQTT
 
 
-
----
-
 📍 Occupancy Detection
 
 Parking occupancy can be detected using sensors such as:
@@ -309,9 +287,6 @@ MQTT
 Backend
    ↓
 Parking Status
-
-
----
 
 📊 Analytics
 
@@ -339,10 +314,10 @@ Revenue
 
 Role	Primary Responsibilities
 
-🚗 Driver	EV profile, journeys, charging, parking, payments and sessions
-⚡ Charging Operator	Stations, chargers, reservations, sessions, pricing and utilization
-🅿️ Parking Operator	Parking locations, bays, occupancy, reservations and IoT
-🛡️ Admin	Platform-wide users, resources, configuration and analytics
+🚗 Driver	EV profile, journeys, charging, parking, payments, and sessions
+⚡ Charging Operator	Stations, chargers, reservations, sessions, pricing, and utilization
+🅿️ Parking Operator	Parking locations, bays, occupancy, reservations, and IoT
+🛡️ Admin	Platform-wide users, resources, configuration, and analytics
 
 
 
@@ -417,7 +392,7 @@ Business Rules
       ↓
 Authorized Action
 
-Security principles
+Security Principles
 
 Backend-enforced authorization
 
@@ -477,37 +452,56 @@ EV-Mobility-Platform/
 
 P0 — Core MVP
 
-✓ EV Profile
-✓ SOC & Energy Estimation
-✓ Journey Planning
-✓ Station Discovery
-✓ Station Ranking
-✓ Charging Reservation
-✓ Parking Reservation
-✓ Payment
-✓ IoT Access
-✓ MQTT + ESP32
-✓ Occupancy Detection
-✓ Session Tracking
-✓ Basic Analytics
+[x] EV Profile
+
+[x] SOC & Energy Estimation
+
+[x] Journey Planning
+
+[x] Station Discovery
+
+[x] Station Ranking
+
+[x] Charging Reservation
+
+[x] Parking Reservation
+
+[x] Payment
+
+[x] IoT Access
+
+[x] MQTT + ESP32
+
+[x] Occupancy Detection
+
+[x] Session Tracking
+
+[x] Basic Analytics
+
 
 Future Scope
 
 Advanced ML
+
 Predictive Demand
+
 Dynamic Pricing
+
 Vehicle Telemetry
+
 Fleet Optimization
+
 V2G
+
 Smart-City Integration
+
 Advanced Mobility Analytics
+
 
 
 ---
 
 🧪 MVP Demonstration Flow
-
-The primary hackathon demonstration follows:
 
 LOGIN
   ↓
@@ -559,7 +553,7 @@ Advanced ML prediction
 Production-scale smart-city integration
 
 
-External APIs, network connectivity, payment systems and prototype IoT hardware may require fallback mechanisms.
+External APIs, network connectivity, payment systems, and prototype IoT hardware may require fallback mechanisms.
 
 
 ---
@@ -585,18 +579,18 @@ Architecture Rule
 
 🚀 Getting Started
 
-1. Clone the repository
+1. Clone the Repository
 
 git clone <repository-url>
 cd EV-Mobility-Platform
 
-2. Install dependencies
+2. Install Dependencies
 
 npm install
 
 Install frontend/backend dependencies according to their respective package configurations.
 
-3. Configure environment variables
+3. Configure Environment Variables
 
 Create the required environment configuration from:
 
@@ -604,7 +598,7 @@ Create the required environment configuration from:
 
 Never commit production secrets.
 
-4. Configure database
+4. Configure Database
 
 The project uses:
 
@@ -612,9 +606,9 @@ Neon PostgreSQL
 +
 Prisma ORM
 
-Apply migrations using the project's Prisma workflow.
+Apply database migrations using the project's Prisma workflow.
 
-5. Start development
+5. Start Development
 
 npm run dev
 
@@ -631,23 +625,24 @@ Project documentation is organized under:
 
 docs/
 
-Important starting documents:
+Overview
 
-docs/00-overview/PROJECT_OVERVIEW.md
-docs/00-overview/PROBLEM_STATEMENT.md
-docs/00-overview/KEY_FEATURES.md
-docs/00-overview/ENGINEERING_RULES.md
-docs/00-overview/GLOSSARY.md
-docs/00-overview/KNOWN_LIMITATIONS.md
+docs/00-overview/
+├── PROJECT_OVERVIEW.md
+├── PROBLEM_STATEMENT.md
+├── KEY_FEATURES.md
+├── ENGINEERING_RULES.md
+├── GLOSSARY.md
+└── KNOWN_LIMITATIONS.md
 
 
 ---
 
 🏆 Hackathon Objective
 
-The SIH MVP focuses on demonstrating a complete, believable EV journey rather than building every possible EV feature.
+The SIH MVP focuses on demonstrating a complete and believable EV journey rather than implementing every possible EV feature.
 
-The goal:
+Goal
 
 PLAN
   ↓
@@ -661,7 +656,7 @@ ACCESS
   ↓
 GO
 
-The strongest demonstration is the connection between:
+The strongest demonstration connects:
 
 Digital Mobility
        +
@@ -674,7 +669,7 @@ Physical IoT Infrastructure
 
 🔮 Future Vision
 
-The platform can evolve toward a broader mobility ecosystem supporting:
+The platform can evolve toward a broader EV mobility ecosystem supporting:
 
 Connected vehicles
 
@@ -695,7 +690,7 @@ Vehicle-to-grid integration
 Energy-aware urban mobility
 
 
-The MVP establishes the foundation for these future capabilities without over-engineering the initial system.
+The MVP establishes the foundation for these capabilities without over-engineering the initial system.
 
 
 ---
