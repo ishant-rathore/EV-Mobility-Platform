@@ -1,23 +1,5 @@
 # ⚡ EV Mobility Platform
 
-## Pay&Park — Intelligent EV Mobility, Charging & Smart Parking Platform
-
-> **One EV journey. One connected mobility experience.**
-
----
-
-## 🚀 Overview
-
-**EV Mobility Platform** is an intelligent EV mobility platform designed to connect journey planning, energy estimation, charging, smart parking, reservations, payment, IoT access, and analytics into one unified experience.
-
-### ⚡ Core Journey
-
-```text
-🗺️ PLAN → ⚡ CHARGE → 🅿️ PARK → 🚗 GO
-
-
-# ⚡ EV Mobility Platform
-
 > **Plan. Charge. Park. Go.**
 
 An intelligent EV mobility platform that connects **battery-aware journey planning, energy estimation, charging-station intelligence, charging reservation, smart parking, digital payments, IoT access control, occupancy monitoring, and mobility analytics** into one connected EV journey.
