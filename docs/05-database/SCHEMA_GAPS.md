@@ -1,5 +1,5 @@
 
-### `05-database/schema_gaps.md`
+### `05-schema_gaps.md`
 
 ```md
 # EV Mobility Platform — Schema Gaps
