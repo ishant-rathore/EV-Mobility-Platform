@@ -1,11 +1,31 @@
-# Analytics Api
+# EV Mobility Platform — Analytics API
 
-**Documentation area:** 06-api
+**Module:** `06-api`  
+**File:** `analytics.md`  
+**Version:** `1.0`  
+**Status:** API Contract Baseline
 
-REST/WebSocket API contracts for every major platform module.
+---
 
-## Purpose
-Define the canonical project guidance for this topic.
+## 1. Purpose
 
-## Status
-Scaffold / team-owned document.
+The Analytics API provides authorized users and operators with aggregated platform metrics.
+
+Analytics data may include:
+
+- Charging utilization
+- Charging sessions
+- Energy consumption
+- Revenue
+- Parking utilization
+- Reservation statistics
+- Operational performance
+
+Analytics endpoints must return aggregated information rather than unnecessary raw personal data.
+
+---
+
+## 2. Base Path
+
+```text
+/api/v1/analytics
