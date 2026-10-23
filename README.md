@@ -5,6 +5,8 @@
 
 An intelligent EV mobility platform that connects **battery-aware journey planning, energy estimation, charging-station intelligence, charging reservation, smart parking, digital payments, IoT access control, and mobility analytics** into one continuous EV journey.
 
+> **Status: In development.** This README includes the intended product workflow and project-planning scope. It does not independently verify that every listed feature is complete, hardware-connected, deployed, or passing end-to-end tests.
+
 ---
 
 ## 🚀 Project Overview
@@ -67,6 +69,7 @@ CHARGING + PARKING SESSION
 SESSION COMPLETION
      ↓
 ANALYTICS
+```
 
 The project's product direction is centered around this end-to-end workflow.
 
@@ -715,6 +718,8 @@ Target:
 ---
 
 🚧 MVP Scope
+
+> The checklist below expresses the intended MVP scope and planning status; treat individual capabilities as complete only after confirming implementation and test evidence.
 
 P0 — Must Have
 
